@@ -17,7 +17,7 @@ This system improves *farmer income, transparency, and accessibility* in local a
 The home page allows users to choose whether they want to log in as a *Farmer* or a *Buyer*.  
 It serves as the entry point of the platform.
 
-![Home Page](FarmerBuyer/Screenshots/home_page.png)
+![Home Page](Screenshots/home_page.png)
 
 ---
 
