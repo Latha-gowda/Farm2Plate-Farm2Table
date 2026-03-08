@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ t.buyer_login }} | Farm2Table</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:#08bf51;
+  color:#1f2a1f;
+  min-height:100vh;
+}
+
+.page{
+  width:min(1200px,92%);
+  margin:auto;
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  gap:40px;
+  padding:40px 0;
+  position:relative;
+}
+
+.lang-switch-top{
+  position:absolute;
+  top:18px;
+  right:0;
+  display:flex;
+  gap:8px;
+  z-index:50;
+}
+
+.lang-switch-top a{
+  text-decoration:none;
+  padding:8px 12px;
+  border-radius:10px;
+  background:#ecefe6;
+  color:#304d30;
+  font-size:13px;
+  font-weight:600;
+  border:1px solid #ddd;
+  transition:0.25s;
+}
+
+.lang-switch-top a:hover{
+  background:#dfe6d3;
+}
+
+.left-panel{
+  padding-right:10px;
+}
+
+.tag{
+  display:inline-block;
+  background:#e6efe2;
+  color:#4d6547;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:18px;
+}
+
+.left-panel h1{
+  font-size:52px;
+  line-height:1.1;
+  font-weight:800;
+  color:#233423;
+  margin-bottom:18px;
+}
+
+.left-panel p{
+  font-size:16px;
+  line-height:1.9;
+  color:#5c675b;
+  max-width:560px;
+  margin-bottom:26px;
+}
+
+.points{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.point{
+  background:#ffffff;
+  border:1px solid #ece6db;
+  border-radius:16px;
+  padding:16px;
+  box-shadow:0 10px 22px rgba(0,0,0,0.04);
+}
+
+.point h4{
+  font-size:15px;
+  color:#304d30;
+  margin-bottom:6px;
+}
+
+.point p{
+  font-size:13px;
+  line-height:1.6;
+  color:#6c746b;
+  margin:0;
+}
+
+.form-card{
+  background:#ffffff;
+  border:1px solid #eee6db;
+  border-radius:28px;
+  padding:34px 30px;
+  box-shadow:0 20px 45px rgba(0,0,0,0.08);
+}
+
+.brand{
+  font-size:24px;
+  font-weight:800;
+  color:#304d30;
+  margin-bottom:20px;
+}
+
+.form-card h2{
+  font-size:30px;
+  margin-bottom:8px;
+  color:#233423;
+}
+
+.sub{
+  color:#687265;
+  font-size:14px;
+  margin-bottom:22px;
+}
+
+.form-group{
+  margin-bottom:16px;
+}
+
+label{
+  display:block;
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:6px;
+  color:#304d30;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #d9d3c7;
+  background:#fcfbf8;
+  font-family:'Poppins',sans-serif;
+  font-size:14px;
+  outline:none;
+  transition:0.25s;
+}
+
+input:focus{
+  border-color:#b87432;
+  box-shadow:0 0 0 4px rgba(184,116,50,0.10);
+}
+
+.btn{
+  width:100%;
+  border:none;
+  padding:14px;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.25s;
+  margin-top:6px;
+  background:#b87432;
+  color:white;
+  box-shadow:0 10px 20px rgba(184,116,50,0.18);
+}
+
+.btn:hover{
+  background:#9e6328;
+  transform:translateY(-2px);
+}
+
+.register-link{
+  margin-top:18px;
+  text-align:center;
+  font-size:14px;
+  color:#6a7468;
+}
+
+.register-link a{
+  color:#b87432;
+  text-decoration:none;
+  font-weight:700;
+}
+
+.register-link a:hover{
+  text-decoration:underline;
+}
+
+@media (max-width:900px){
+  .page{
+    grid-template-columns:1fr;
+    padding-top:80px;
+  }
+
+  .left-panel h1{
+    font-size:38px;
+  }
+}
+
+@media (max-width:560px){
+  .points{
+    grid-template-columns:1fr;
+  }
+
+  .form-card{
+    padding:24px 18px;
+  }
+
+  .left-panel h1{
+    font-size:32px;
+  }
+
+  .lang-switch-top a{
+    padding:7px 10px;
+    font-size:12px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <div class="lang-switch-top">
+    <a href="/set_language/en">English</a>
+    <a href="/set_language/kn">ಕನ್ನಡ</a>
+  </div>
+
+  <div class="left-panel">
+
+    <div class="tag">{{ t.buyer_access }}</div>
+
+    <h1>{{ t.buyer_login_title }}</h1>
+
+    <p>
+      {{ t.buyer_login_desc_long }}
+    </p>
+
+    <div class="points">
+
+      <div class="point">
+        <h4>{{ t.nearby_community_access }}</h4>
+        <p>{{ t.nearby_community_access_desc }}</p>
+      </div>
+
+      <div class="point">
+        <h4>{{ t.fresh_product_discovery }}</h4>
+        <p>{{ t.fresh_product_discovery_desc }}</p>
+      </div>
+
+      <div class="point">
+        <h4>{{ t.direct_farmer_orders }}</h4>
+        <p>{{ t.direct_farmer_orders_desc }}</p>
+      </div>
+
+      <div class="point">
+        <h4>{{ t.trusted_local_produce }}</h4>
+        <p>{{ t.trusted_local_produce_desc }}</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="form-card">
+
+    <div class="brand">{{ t.logo }}</div>
+
+    <h2>{{ t.buyer_login }}</h2>
+    <p class="sub">{{ t.enter_login_details_buyer }}</p>
+
+    <form method="POST">
+
+      <div class="form-group">
+        <label>{{ t.phone_number }}</label>
+        <input type="tel" name="phone" placeholder="{{ t.enter_phone_number }}" required>
+      </div>
+
+      <div class="form-group">
+        <label>{{ t.password }}</label>
+        <input type="password" name="password" placeholder="{{ t.enter_password }}" required>
+      </div>
+
+      <button type="submit" class="btn">{{ t.login_to_dashboard }}</button>
+
+    </form>
+
+    <div class="register-link">
+      {{ t.new_buyer }} <a href="/buyer_register">{{ t.create_account }}</a>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

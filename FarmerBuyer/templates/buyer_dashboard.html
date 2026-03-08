@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ t.buyer_dashboard }} | Farm2Table</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#08bf51;
+      color:#1f2a1f;
+      min-height:100vh;
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    body::before,
+    body::after{
+      content:"";
+      position:fixed;
+      border-radius:50%;
+      filter:blur(60px);
+      z-index:0;
+      opacity:0.35;
+    }
+
+    body::before{
+      width:260px;
+      height:260px;
+      background:#d8b48a;
+      top:-60px;
+      left:-60px;
+    }
+
+    body::after{
+      width:320px;
+      height:320px;
+      background:#b8d49b;
+      bottom:-100px;
+      right:-80px;
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:30;
+      background:rgba(255,255,255,0.82);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid #ece5d8;
+      padding:18px 40px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .logo{
+      font-size:24px;
+      font-weight:800;
+      color:#304d30;
+      letter-spacing:0.3px;
+    }
+
+    .header-right{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .lang-switch{
+      display:flex;
+      gap:8px;
+    }
+
+    .lang-switch a{
+      text-decoration:none;
+      padding:8px 12px;
+      border-radius:10px;
+      background:#ecefe6;
+      color:#304d30;
+      font-size:13px;
+      font-weight:600;
+      border:1px solid #ddd;
+      transition:0.25s;
+    }
+
+    .lang-switch a:hover{
+      background:#dfe6d3;
+    }
+
+    .cart-btn,
+    .logout{
+      text-decoration:none;
+      color:white;
+      padding:10px 16px;
+      border-radius:12px;
+      font-size:14px;
+      font-weight:700;
+      transition:0.25s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .cart-btn{
+      background:linear-gradient(135deg,#556b2f,#6f8741);
+      box-shadow:0 8px 18px rgba(85,107,47,0.20);
+    }
+
+    .logout{
+      background:linear-gradient(135deg,#b87432,#d29054);
+      box-shadow:0 8px 18px rgba(184,116,50,0.20);
+    }
+
+    .cart-btn:hover,
+    .logout:hover{
+      transform:translateY(-2px);
+    }
+
+    .cart-count{
+      min-width:24px;
+      height:24px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.18);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      font-weight:800;
+      padding:0 6px;
+    }
+
+    .container{
+      width:min(1200px,92%);
+      margin:auto;
+      padding:34px 0 60px;
+      position:relative;
+      z-index:1;
+    }
+
+    .flash-wrapper{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:9999;
+  width:min(340px, calc(100vw - 32px));
+}
+
+.flash-toast{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 14px;
+  border-radius:14px;
+  color:#fff;
+  box-shadow:0 12px 28px rgba(0,0,0,0.18);
+  animation:slideUpToast 0.25s ease;
+}
+
+.flash-success{
+  background:linear-gradient(135deg,#2e7d32,#4caf50);
+}
+
+.flash-error{
+  background:linear-gradient(135deg,#c62828,#ef5350);
+}
+
+.flash-icon{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  flex-shrink:0;
+}
+
+.flash-text{
+  font-size:13px;
+  font-weight:600;
+  line-height:1.4;
+  flex:1;
+}
+
+.flash-close{
+  border:none;
+  background:transparent;
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+  line-height:1;
+  opacity:0.9;
+}
+
+.flash-close:hover{
+  opacity:1;
+}
+
+@keyframes slideUpToast{
+  from{
+    opacity:0;
+    transform:translateY(16px) scale(0.96);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+@media(max-width:600px){
+  .flash-wrapper{
+    right:16px;
+    left:16px;
+    bottom:16px;
+    width:auto;
+  }
+}
+
+    .flash-toast{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-radius:16px;
+      color:#fff;
+      box-shadow:0 14px 30px rgba(0,0,0,0.16);
+      animation:fadeUp 0.35s ease;
+    }
+
+    .flash-success{
+      background:linear-gradient(135deg,#2e7d32,#4caf50);
+    }
+
+    .flash-error{
+      background:linear-gradient(135deg,#c62828,#ef5350);
+    }
+
+    .flash-icon{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      flex-shrink:0;
+    }
+
+    .flash-text{
+      font-size:14px;
+      font-weight:600;
+      line-height:1.5;
+      flex:1;
+    }
+
+    .flash-close{
+      border:none;
+      background:transparent;
+      color:#fff;
+      font-size:22px;
+      cursor:pointer;
+      line-height:1;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#908c89,#ead2bb);
+      color:white;
+      border-radius:26px;
+      padding:30px;
+      margin-bottom:20px;
+      box-shadow:0 18px 40px rgba(184,116,50,0.18);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.08);
+      right:-40px;
+      top:-40px;
+    }
+
+    .hero h1{
+      font-size:36px;
+      margin-bottom:8px;
+      font-weight:800;
+    }
+
+    .hero p{
+      font-size:15px;
+      line-height:1.8;
+      max-width:700px;
+      color:rgba(255,255,255,0.94);
+    }
+
+    .hero-badge{
+      background:rgba(255,255,255,0.16);
+      border:1px solid rgba(255,255,255,0.18);
+      padding:12px 18px;
+      border-radius:18px;
+      font-weight:700;
+      font-size:14px;
+      backdrop-filter:blur(8px);
+    }
+
+    .top-tools{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+      margin:18px 0 22px;
+    }
+
+    .search-bar{
+      flex:1;
+      max-width:340px;
+      position:relative;
+    }
+
+    .search-bar input{
+      width:100%;
+      padding:11px 14px 11px 40px;
+      border-radius:999px;
+      border:1px solid #ddd7ca;
+      background:rgba(255,255,255,0.94);
+      font-family:'Poppins',sans-serif;
+      font-size:13px;
+      outline:none;
+      color:#2c342c;
+      box-shadow:0 10px 20px rgba(0,0,0,0.05);
+      transition:0.25s ease;
+    }
+
+    .search-bar input:focus{
+      border-color:#556b2f;
+      box-shadow:0 0 0 4px rgba(85,107,47,0.10);
+      background:#fff;
+    }
+
+    .search-icon{
+      position:absolute;
+      left:14px;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:14px;
+      color:#7b846f;
+    }
+
+    .mini-note{
+      background:rgba(255,255,255,0.86);
+      border:1px solid #ece6db;
+      color:#5f6b5f;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:600;
+      box-shadow:0 10px 20px rgba(0,0,0,0.04);
+    }
+
+    .stats-row{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+      margin:18px 0 24px;
+    }
+
+    .stat{
+      background:#fff;
+      border:1px solid #ece6db;
+      border-radius:18px;
+      padding:20px;
+      text-align:center;
+      box-shadow:0 10px 20px rgba(0,0,0,0.06);
+    }
+
+    .stat h3{
+      color:#304d30;
+      margin-bottom:6px;
+      font-size:28px;
+    }
+
+    .stat p{
+      color:#6b7568;
+      font-size:13px;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:14px;
+      flex-wrap:wrap;
+      margin:30px 0 14px;
+    }
+
+    .section-title{
+      font-size:26px;
+      font-weight:800;
+      color:#233423;
+    }
+
+    .section-sub{
+      color:#667063;
+      font-size:14px;
+      line-height:1.7;
+      max-width:760px;
+    }
+
+    .community-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+      margin-bottom:28px;
+    }
+
+    .community-card{
+      background:white;
+      border-radius:20px;
+      border:1px solid #ece6db;
+      padding:20px;
+      box-shadow:0 12px 22px rgba(0,0,0,0.06);
+    }
+
+    .community-card h3{
+      color:#304d30;
+      margin-bottom:8px;
+      font-size:20px;
+    }
+
+    .community-card p{
+      color:#687265;
+      font-size:14px;
+      line-height:1.8;
+      margin-bottom:6px;
+    }
+
+    .community-card ul{
+      padding-left:18px;
+      color:#5d675c;
+      line-height:1.8;
+      font-size:14px;
+      margin-top:8px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .card{
+      background:white;
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid #ece6db;
+      box-shadow:0 12px 22px rgba(0,0,0,0.07);
+      transition:0.28s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-5px);
+    }
+
+    .card img{
+      width:100%;
+      height:155px;
+      object-fit:cover;
+      display:block;
+      background:#f2f2f2;
+    }
+
+    .card-body{
+      padding:16px 16px 14px;
+    }
+
+    .card h3{
+      margin-bottom:8px;
+      color:#304d30;
+      font-size:18px;
+      line-height:1.3;
+    }
+
+    .meta{
+      display:grid;
+      gap:4px;
+      margin-bottom:12px;
+    }
+
+    .meta p{
+      color:#687265;
+      line-height:1.6;
+      font-size:13px;
+    }
+
+    .meta p strong{
+      color:#304d30;
+    }
+
+    .btn-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .btn-order,
+    .btn-trust{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      text-decoration:none;
+      padding:10px 10px;
+      border-radius:10px;
+      font-size:12px;
+      font-weight:700;
+      color:white;
+      transition:0.25s ease;
+      text-align:center;
+      min-height:42px;
+    }
+
+    .btn-order{
+      background:#556b2f;
+    }
+
+    .btn-order:hover{
+      transform:translateY(-2px);
+    }
+
+    .btn-trust{
+      background:#b87432;
+    }
+
+    .btn-trust:hover{
+      transform:translateY(-2px);
+    }
+
+    .home-btn{
+    text-decoration:none;
+    background:linear-gradient(135deg,#4f7c68,#77a089);
+    color:white;
+    padding:9px 14px;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:700;
+    transition:0.2s;
+    }
+
+    .home-btn:hover{
+    transform:translateY(-2px);
+    }
+
+    .add-icon{
+      width:20px;
+      height:20px;
+      min-width:20px;
+      background:#ffffff;
+      color:#2f5a1f;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      font-size:15px;
+      line-height:1;
+      box-shadow:0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .empty-search,
+    display:none;
+    }
+
+    footer{
+      text-align:center;
+      margin-top:40px;
+      color:#5f6b5f;
+      padding-bottom:24px;
+      font-size:14px;
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(20px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @media(max-width:980px){
+      .grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .stats-row{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .community-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:640px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      .stats-row{
+        grid-template-columns:1fr;
+      }
+
+      header{
+        padding:16px 18px;
+      }
+
+      .hero h1{
+        font-size:28px;
+      }
+
+      .top-tools{
+        align-items:stretch;
+      }
+
+      .search-bar{
+        max-width:none;
+      }
+
+      .btn-row{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">{{ t.logo }}</div>
+
+  <div class="header-right">
+    <div class="lang-switch">
+      <a href="/set_language/en">English</a>
+      <a href="/set_language/kn">ಕನ್ನಡ</a>
+    </div>
+    <a class="home-btn" href="/">🏠 Home</a>
+    
+
+    <a class="cart-btn" href="/buyer_cart">
+      🛒 Cart
+      <span class="cart-count">{{ cart_count or 0 }}</span>
+    </a>
+
+    <a class="logout" href="/buyer_login">{{ t.logout }}</a>
+  </div>
+</header>
+
+<div class="container">
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrapper">
+        {% for category, message in messages %}
+          <div class="flash-toast flash-{{ category }}" id="flashToast">
+            <div class="flash-icon">
+              {% if category == 'success' %}✅{% else %}⚠️{% endif %}
+            </div>
+            <div class="flash-text">{{ message }}</div>
+            <button class="flash-close" onclick="closeFlash()">×</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <section class="hero">
+    <div>
+      <h1>{{ t.buyer_dashboard }}</h1>
+      <p>{{ t.buyer_dashboard_desc_long }}</p>
+    </div>
+    <div class="hero-badge">🛒 {{ t.fresh_nearby_products }}</div>
+  </section>
+
+  <div class="top-tools">
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        id="productSearch"
+        placeholder="Search crop, farmer or community"
+        onkeyup="filterProducts()"
+      >
+    </div>
+
+    <div class="mini-note">Fresh local products from nearby farmers</div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat">
+      <h3>{{ nearby_communities|length }}</h3>
+      <p>{{ t.nearby_communities }}</p>
+    </div>
+
+    <div class="stat">
+      <h3>{{ products|length }}</h3>
+      <p>{{ t.available_products }}</p>
+    </div>
+
+    <div class="stat">
+      <h3>10KM</h3>
+      <p>{{ t.nearby_radius }}</p>
+    </div>
+
+    <div class="stat">
+      <h3>{{ cart_count or 0 }}</h3>
+      <p>Cart Items</p>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div>
+      <div class="section-title">{{ t.nearby_farmer_communities }}</div>
+      <div class="section-sub">{{ t.nearby_farmer_communities_desc }}</div>
+    </div>
+  </div>
+
+  {% if nearby_communities %}
+    <div class="community-grid">
+      {% for comm in nearby_communities %}
+        <div class="community-card">
+          <h3>{{ comm.name }}</h3>
+          <p><strong>{{ t.distance }}:</strong> {{ comm.distance }} KM</p>
+          <p><strong>{{ t.farmers_in_this_community }}</strong></p>
+
+          <ul>
+            {% for farmer in comm.farmers %}
+              <li>{{ farmer.name }} - {{ farmer.distance }} KM away</li>
+            {% else %}
+              <li>{{ t.no_farmers_yet }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-box">
+      <strong>{{ t.no_nearby_communities }}</strong><br>
+      {{ t.no_nearby_communities_desc }}
+    </div>
+  {% endif %}
+
+  <div class="section-head">
+    <div>
+      <div class="section-title">{{ t.available_products_nearby }}</div>
+      <div class="section-sub">{{ t.available_products_nearby_desc }}</div>
+    </div>
+  </div>
+
+  <div class="grid" id="productsGrid">
+  {% for prod in products %}
+
+    {% set name = prod.name.lower().strip() %}
+    {% set img = 'https://images.pexels.com/photos/2252584/pexels-photo-2252584.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% if 'carrot' in name or 'carrots' in name %}
+      {% set img = 'https://images.pexels.com/photos/143133/pexels-photo-143133.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'tomato' in name or 'tomatoes' in name %}
+      {% set img = 'https://images.pexels.com/photos/533280/pexels-photo-533280.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'potato' in name or 'potatoes' in name or 'aloo' in name %}
+      {% set img = 'https://images.pexels.com/photos/144248/potatoes-vegetables-food-agriculture-144248.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'onion' in name or 'onions' in name %}
+      {% set img = 'https://images.pexels.com/photos/4197445/pexels-photo-4197445.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'banana' in name or 'bananas' in name %}
+      {% set img = 'https://images.pexels.com/photos/2872755/pexels-photo-2872755.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'cabbage' in name %}
+      {% set img = 'https://images.pexels.com/photos/5945904/pexels-photo-5945904.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'brinjal' in name or 'eggplant' in name or 'baingan' in name %}
+      {% set img = 'https://images.pexels.com/photos/321551/pexels-photo-321551.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'chilli' in name or 'chili' in name or 'chilies' in name or 'green chilli' in name or 'mirchi' in name %}
+      {% set img = 'https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'corn' in name or 'maize' in name %}
+      {% set img = 'https://images.pexels.com/photos/547263/pexels-photo-547263.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'rice' in name %}
+      {% set img = 'https://images.pexels.com/photos/7421204/pexels-photo-7421204.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'wheat' in name %}
+      {% set img = 'https://images.pexels.com/photos/326082/pexels-photo-326082.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'apple' in name or 'apples' in name %}
+      {% set img = 'https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'mango' in name or 'mangoes' in name %}
+      {% set img = 'https://images.pexels.com/photos/918643/pexels-photo-918643.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'grape' in name or 'grapes' in name %}
+      {% set img = 'https://images.pexels.com/photos/708777/pexels-photo-708777.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'spinach' in name or 'palak' in name %}
+      {% set img = 'https://images.pexels.com/photos/2329440/pexels-photo-2329440.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'bean' in name or 'beans' in name %}
+      {% set img = 'https://images.pexels.com/photos/3004798/pexels-photo-3004798.jpeg' %}
+
+    {% elif 'cauliflower' in name %}
+      {% set img = 'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% elif 'okra' in name or 'lady finger' in name or 'bhindi' in name %}
+      {% set img = 'https://images.pexels.com/photos/5507737/pexels-photo-5507737.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% endif %}
+      <div
+        class="card product-card"
+        data-search="{{ prod.name|lower }} {{ prod.farmer_name|lower }} {{ prod.community_name|lower }}"
+      >
+        <img src="{{ img }}" alt="{{ prod.name }}">
+
+        <div class="card-body">
+          <h3>{{ prod.name }}</h3>
+
+          <div class="meta">
+            <p><strong>{{ t.farmer }}:</strong> {{ prod.farmer_name }}</p>
+            <p><strong>{{ t.community }}:</strong> {{ prod.community_name }}</p>
+            <p><strong>{{ t.price }}:</strong> ₹{{ prod.price }}/kg</p>
+            <p><strong>{{ t.available_quantity }}:</strong> {{ prod.quantity }} kg</p>
+          </div>
+
+          <div class="btn-row">
+            <a href="/add_to_cart/{{ prod.id }}" class="btn-order">
+              <span class="add-icon">+</span>
+              <span>Add to Cart</span>
+            </a>
+
+            <a href="/crop_report/{{ prod.id }}" class="btn-trust">
+              🌱 <span>Trust Report</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    {% else %}
+      <div class="empty-box" style="grid-column:1/-1;">
+        <strong>{{ t.no_products_available }}</strong><br>
+        {{ t.no_products_available_desc }}
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="empty-search" id="emptySearch">
+    No matching products found.
+  </div>
+
+</div>
+
+<footer>
+  © 2026 {{ t.logo }} | Built with ❤️ by Latha
+</footer>
+
+<script>
+function filterProducts() {
+  const input = document.getElementById("productSearch");
+  const filter = input.value.toLowerCase().trim();
+  const cards = document.querySelectorAll(".product-card");
+  const empty = document.getElementById("emptySearch");
+
+  let visible = 0;
+
+  cards.forEach(card => {
+    const text = (card.dataset.search || "").toLowerCase();
+
+    if (filter === "" || text.includes(filter)) {
+      card.style.display = "";
+      visible++;
+    } else {
+      card.style.display = "none";
+    }
+  });
+
+  empty.style.display = (filter !== "" && visible === 0) ? "block" : "none";
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const empty = document.getElementById("emptySearch");
+  if (empty) empty.style.display = "none";
+});
+</script>
+
+
+</body>
+</html>

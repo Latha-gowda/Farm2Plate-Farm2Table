@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ t.farmer_ai_insights or 'AI Smart Farming Insights' }} | Farm2Table</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#08bf51;
+      color:#1f2a1f;
+      min-height:100vh;
+    }
+
+    .page{
+      width:min(1180px,92%);
+      margin:auto;
+      padding:18px 0 36px;
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:rgba(255,255,255,0.84);
+      backdrop-filter:blur(12px);
+      border:1px solid #ece5d8;
+      border-radius:20px;
+      padding:14px 18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .logo{
+      font-size:23px;
+      font-weight:800;
+      color:#304d30;
+    }
+
+    .header-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .lang-switch{
+      display:flex;
+      gap:8px;
+    }
+
+    .lang-switch a{
+      text-decoration:none;
+      padding:8px 12px;
+      border-radius:10px;
+      background:#eef3e8;
+      color:#304d30;
+      border:1px solid #dfe7d6;
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .back-btn{
+      text-decoration:none;
+      background:linear-gradient(135deg,#b87432,#d29054);
+      color:#fff;
+      padding:9px 14px;
+      border-radius:10px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#35552f,#5f7c3d);
+      color:white;
+      border-radius:24px;
+      padding:16px 18px;
+      margin-bottom:18px;
+      box-shadow:0 14px 28px rgba(48,77,48,0.18);
+    }
+
+    .hero-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .hero h1{
+      font-size:24px;
+      line-height:1.15;
+      margin-bottom:8px;
+      font-weight:800;
+    }
+
+    .hero p{
+      font-size:14px;
+      line-height:1.7;
+      max-width:760px;
+      color:rgba(255,255,255,0.94);
+    }
+
+    .hero-badge{
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.18);
+      padding:10px 14px;
+      border-radius:14px;
+      font-size:13px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .ai-summary{
+      margin-top:14px;
+      background:rgba(255,255,255,0.12);
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:16px;
+      padding:14px;
+    }
+
+    .ai-summary h3{
+      font-size:17px;
+      margin-bottom:6px;
+    }
+
+    .ai-summary p{
+      font-size:14px;
+      line-height:1.7;
+      margin:0;
+    }
+
+    .stats-row{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .stat{
+      background:#fff;
+      border:1px solid #ece6db;
+      border-radius:18px;
+      padding:12px;
+      box-shadow:0 10px 22px rgba(0,0,0,0.05);
+    }
+
+    .stat-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .stat-icon{
+      width:42px;
+      height:42px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      color:white;
+      background:linear-gradient(135deg,#556b2f,#7d9950);
+    }
+
+    .stat h3{
+      font-size:22px;
+      color:#304d30;
+      line-height:1;
+      margin-bottom:4px;
+    }
+
+    .stat p{
+      font-size:12px;
+      color:#6b7468;
+    }
+
+    .action-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .action-btn{
+      text-decoration:none;
+      padding:10px 14px;
+      border-radius:12px;
+      font-size:13px;
+      font-weight:700;
+      color:white;
+      box-shadow:0 8px 16px rgba(0,0,0,0.08);
+    }
+
+    .action-green{ background:linear-gradient(135deg,#556b2f,#6f8741); }
+    .action-brown{ background:linear-gradient(135deg,#b87432,#d29054); }
+    .action-teal{ background:linear-gradient(135deg,#4f7c68,#77a089); }
+    .action-olive{ background:linear-gradient(135deg,#6f7f4f,#94aa70); }
+
+    .layout{
+      display:grid;
+      grid-template-columns:1.65fr 1fr;
+      gap:16px;
+    }
+
+    .left-column{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+    .right-column{
+      display:grid;
+      gap:16px;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid #ece6db;
+      border-radius:20px;
+      padding:12px;
+      box-shadow:0 10px 22px rgba(0,0,0,0.05);
+    }
+
+    .card h2{
+      font-size:18px;
+      color:#304d30;
+      margin-bottom:6px;
+    }
+
+    .card-sub{
+      font-size:12px;
+      color:#6c746b;
+      line-height:1.6;
+      margin-bottom:12px;
+    }
+
+    .chart-box{
+      position:relative;
+      height:160px;
+      width:100%;
+    }
+
+    .tips{
+      display:grid;
+      gap:10px;
+    }
+
+    .tip{
+      background:#fff6ea;
+      border-left:4px solid #b87432;
+      border-radius:12px;
+      padding:11px 12px;
+      font-size:13px;
+      line-height:1.65;
+      color:#586156;
+    }
+
+    .tip strong{
+      color:#304d30;
+    }
+
+    .trust-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .trust-item{
+      background:#f8f5ef;
+      border:1px solid #ece6db;
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .trust-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:13px;
+      font-weight:700;
+      color:#304d30;
+      margin-bottom:7px;
+    }
+
+    .bar{
+      width:100%;
+      height:10px;
+      background:#e6dfd4;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .bar span{
+      display:block;
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(135deg,#556b2f,#7d9950);
+    }
+
+    .stock-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .stock-item{
+      background:#fff9ef;
+      border:1px solid #f0e2ca;
+      border-radius:12px;
+      padding:12px;
+      font-size:13px;
+      line-height:1.6;
+      color:#5c6459;
+    }
+
+    .stock-item strong{
+      color:#304d30;
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .summary-box{
+      background:#f8f5ef;
+      border:1px solid #ece6db;
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .summary-box h4{
+      font-size:12px;
+      color:#70796c;
+      margin-bottom:4px;
+      font-weight:600;
+    }
+
+    .summary-box p{
+      font-size:17px;
+      font-weight:800;
+      color:#304d30;
+    }
+
+    .empty-note{
+      font-size:13px;
+      color:#6b7468;
+      line-height:1.6;
+    }
+
+    @media (max-width:1100px){
+      .layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:820px){
+      .left-column{
+        grid-template-columns:1fr;
+      }
+
+      .stats-row{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media (max-width:620px){
+      .page{
+        width:min(94%,94%);
+      }
+
+      header{
+        padding:14px;
+      }
+
+      .hero{
+        padding:18px;
+      }
+
+      .hero h1{
+        font-size:25px;
+      }
+
+      .stats-row{
+        grid-template-columns:1fr;
+      }
+
+      .summary-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <header>
+    <div class="logo">{{ t.logo }}</div>
+
+    <div class="header-right">
+      <div class="lang-switch">
+        <a href="/set_language/en">English</a>
+        <a href="/set_language/kn">ಕನ್ನಡ</a>
+      </div>
+      <a class="back-btn" href="/farmer_dashboard">← {{ t.back_to_farmer_dashboard or 'Back' }}</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-top">
+      <div>
+        <h1>{{ t.farmer_ai_insights or 'AI Smart Farming Insights' }}</h1>
+        <p>{{ t.ai_page_desc or 'Simple farm report based on your real app activity.' }}</p>
+      </div>
+
+      <div class="hero-badge">📊 {{ t.smart_farming_panel or 'Live Farm Report' }}</div>
+    </div>
+
+    <div class="ai-summary">
+      <h3>🤖 {{ t.ai_suggestions or 'Farm Summary' }}</h3>
+      <p>
+        {{ ai_summary or
+        ((top_crop ~ ' is your best selling crop. ') if top_crop else '') ~
+        ('You have ' ~ total_orders ~ ' orders. ') ~
+        ('Your total sales are ₹' ~ total_revenue ~ '. ') ~
+        ('Keep stock ready for top selling crops.') }}
+      </p>
+    </div>
+  </section>
+
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon">🌾</div></div>
+      <h3>{{ total_products }}</h3>
+      <p>{{ t.products_listed or 'Products' }}</p>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon">🛒</div></div>
+      <h3>{{ total_orders }}</h3>
+      <p>{{ t.total_orders or 'Orders' }}</p>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon">💰</div></div>
+      <h3>₹{{ total_revenue }}</h3>
+      <p>{{ t.total_revenue or 'Total Sales' }}</p>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon">⭐</div></div>
+      <h3>{{ top_crop }}</h3>
+      <p>{{ t.top_crop or 'Top Crop' }}</p>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <a href="/add_crop" class="action-btn action-green">{{ t.add_crop or 'Add Crop' }}</a>
+    <a href="/farmer_orders" class="action-btn action-brown">{{ t.buyer_orders or 'Orders' }}</a>
+    <a href="/community_inventory" class="action-btn action-teal">{{ t.community_inventory or 'Inventory' }}</a>
+    <a href="/community_chat" class="action-btn action-olive">{{ t.community_chat or 'Chat' }}</a>
+  </div>
+
+  <div class="layout">
+
+    <div class="left-column">
+
+      <div class="card">
+        <h2>{{ t.crop_demand or 'Crop Demand' }}</h2>
+        <p class="card-sub">These crops are selling more.</p>
+        <div class="chart-box">
+          <canvas id="demandChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>{{ t.monthly_earnings or 'Monthly Sales' }}</h2>
+        <p class="card-sub">Your sales month by month.</p>
+        <div class="chart-box">
+          <canvas id="earnChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>{{ t.price_trend or 'Current Crop Prices' }}</h2>
+        <p class="card-sub">Current selling price of your crops.</p>
+        <div class="chart-box">
+          <canvas id="priceChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>{{ t.community_activity or 'Buyer Activity' }}</h2>
+        <p class="card-sub">Days when buyers order more.</p>
+        <div class="chart-box">
+          <canvas id="activityChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="right-column">
+
+      <div class="card">
+        <h2>🤖 {{ t.ai_suggestions or 'Easy Tips' }}</h2>
+        <p class="card-sub">Simple tips from your real data.</p>
+
+        <div class="tips">
+          <div class="tip">
+            <strong>{{ t.demand_tip or 'Best Selling Crop' }}:</strong> {{ ai_demand_tip }}
+          </div>
+          <div class="tip">
+            <strong>{{ t.price_tip or 'Stock Advice' }}:</strong> {{ ai_price_tip }}
+          </div>
+          <div class="tip">
+            <strong>{{ t.community_tip or 'Buyer Day' }}:</strong> {{ ai_community_tip }}
+          </div>
+          <div class="tip">
+            <strong>{{ t.weather_tip or 'Sales Note' }}:</strong> {{ weather_tip }}
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>{{ t.farm_trust_score or 'Buyer Trust Score' }}</h2>
+        <p class="card-sub">How complete and trustworthy your crop details look.</p>
+
+        <div class="trust-list">
+          <div class="trust-item">
+            <div class="trust-head">
+              <span>{{ t.crop_transparency or 'Crop Details' }}</span>
+              <span>{{ trust_crop }}%</span>
+            </div>
+            <div class="bar"><span style="width:{{ trust_crop }}%"></span></div>
+          </div>
+
+          <div class="trust-item">
+            <div class="trust-head">
+              <span>{{ t.natural_farming or 'Natural Farming' }}</span>
+              <span>{{ trust_natural }}%</span>
+            </div>
+            <div class="bar"><span style="width:{{ trust_natural }}%"></span></div>
+          </div>
+
+          <div class="trust-item">
+            <div class="trust-head">
+              <span>{{ t.storage_quality or 'Storage Info' }}</span>
+              <span>{{ trust_storage }}%</span>
+            </div>
+            <div class="bar"><span style="width:{{ trust_storage }}%"></span></div>
+          </div>
+
+          <div class="trust-item">
+            <div class="trust-head">
+              <span>{{ t.freshness or 'Harvest Info' }}</span>
+              <span>{{ trust_freshness }}%</span>
+            </div>
+            <div class="bar"><span style="width:{{ trust_freshness }}%"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>{{ t.low_stock_alerts or 'Low Stock' }}</h2>
+        <p class="card-sub">These crops may finish soon.</p>
+
+        {% if low_stock_items %}
+          <div class="stock-list">
+            {% for item in low_stock_items %}
+              <div class="stock-item">
+                <strong>{{ item.name }}</strong> - {{ item.quantity }} kg left.
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="empty-note">No low stock warning now.</p>
+        {% endif %}
+      </div>
+
+      <div class="card">
+        <h2>{{ t.profit_summary or 'Sales Summary' }}</h2>
+        <p class="card-sub">Real numbers from your app usage.</p>
+
+        <div class="summary-grid">
+          <div class="summary-box">
+            <h4>{{ t.products_listed or 'Products' }}</h4>
+            <p>{{ total_products }}</p>
+          </div>
+
+          <div class="summary-box">
+            <h4>{{ t.total_orders or 'Orders' }}</h4>
+            <p>{{ total_orders }}</p>
+          </div>
+
+          <div class="summary-box">
+            <h4>{{ t.total_revenue or 'Total Sales' }}</h4>
+            <p>₹{{ total_revenue }}</p>
+          </div>
+
+          <div class="summary-box">
+            <h4>{{ t.top_crop or 'Top Crop' }}</h4>
+            <p>{{ top_crop }}</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  new Chart(document.getElementById("demandChart"), {
+    type: "bar",
+    data: {
+      labels: {{ demand_labels|tojson }},
+      datasets: [{
+        data: {{ demand_values|tojson }},
+        backgroundColor: ["#556b2f","#6f8741","#8aa35d","#b87432","#d29054","#4f7c68"]
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  new Chart(document.getElementById("earnChart"), {
+    type: "line",
+    data: {
+      labels: {{ earnings_labels|tojson }},
+      datasets: [{
+        data: {{ earnings_values|tojson }},
+        borderColor: "#556b2f",
+        fill: true,
+        backgroundColor: "rgba(85,107,47,0.15)",
+        tension: 0.35
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  new Chart(document.getElementById("priceChart"), {
+    type: "bar",
+    data: {
+      labels: {{ price_labels|tojson }},
+      datasets: [{
+        data: {{ price_values|tojson }},
+        backgroundColor: "#b87432"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  new Chart(document.getElementById("activityChart"), {
+    type: "bar",
+    data: {
+      labels: {{ activity_labels|tojson }},
+      datasets: [{
+        data: {{ activity_values|tojson }},
+        backgroundColor: "#4f7c68"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    }
+  });
+</script>
+
+</body>
+</html>

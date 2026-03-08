@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ t.community_inventory }} | Farm2Table</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#08bf51;
+      color:#1f2a1f;
+      min-height:100vh;
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    body::before,
+    body::after{
+      content:"";
+      position:fixed;
+      border-radius:50%;
+      filter:blur(60px);
+      z-index:0;
+      opacity:0.35;
+    }
+
+    body::before{
+      width:260px;
+      height:260px;
+      background:#b8d49b;
+      top:-60px;
+      left:-60px;
+    }
+
+    body::after{
+      width:320px;
+      height:320px;
+      background:#d8b48a;
+      bottom:-100px;
+      right:-80px;
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:rgba(255,255,255,0.75);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid #ece5d8;
+      padding:18px 40px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      animation:slideDown 0.8s ease;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .logo{
+      font-size:24px;
+      font-weight:800;
+      color:#304d30;
+      letter-spacing:0.3px;
+    }
+
+    .header-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .lang-switch{
+      display:flex;
+      gap:8px;
+    }
+
+    .lang-switch a{
+      text-decoration:none;
+      padding:8px 12px;
+      border-radius:10px;
+      background:#ecefe6;
+      color:#304d30;
+      font-size:13px;
+      font-weight:600;
+      border:1px solid #ddd;
+      transition:0.25s;
+    }
+
+    .lang-switch a:hover{
+      background:#dfe6d3;
+    }
+
+    .back-btn{
+      text-decoration:none;
+      background:linear-gradient(135deg,#556b2f,#6f8741);
+      color:white;
+      padding:10px 16px;
+      border-radius:10px;
+      font-size:14px;
+      font-weight:600;
+      transition:0.3s ease;
+      box-shadow:0 8px 18px rgba(85,107,47,0.22);
+    }
+
+    .back-btn:hover{
+      transform:translateY(-2px) scale(1.03);
+      box-shadow:0 14px 24px rgba(85,107,47,0.30);
+    }
+
+    .container{
+      width:min(1200px,92%);
+      margin:auto;
+      padding:42px 0 60px;
+      position:relative;
+      z-index:1;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#556b2f,#738f43);
+      color:white;
+      border-radius:28px;
+      padding:34px 30px;
+      margin-bottom:30px;
+      box-shadow:0 18px 40px rgba(85,107,47,0.18);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+      animation:fadeUp 0.9s ease;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.08);
+      right:-40px;
+      top:-40px;
+    }
+
+    .hero h1{
+      font-size:38px;
+      margin-bottom:8px;
+      font-weight:800;
+    }
+
+    .hero p{
+      font-size:15px;
+      line-height:1.8;
+      max-width:650px;
+      color:rgba(255,255,255,0.92);
+    }
+
+    .hero-badge{
+      background:rgba(255,255,255,0.16);
+      border:1px solid rgba(255,255,255,0.18);
+      padding:14px 20px;
+      border-radius:18px;
+      font-weight:700;
+      font-size:14px;
+      backdrop-filter:blur(8px);
+      animation:floatY 3s ease-in-out infinite;
+    }
+
+    .stats-row{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin:30px 0;
+      animation:fadeUp 1s ease;
+    }
+
+    .stat{
+      background:#fff;
+      border:1px solid #ece6db;
+      border-radius:20px;
+      text-align:center;
+      padding:22px 16px;
+      box-shadow:0 12px 24px rgba(0,0,0,0.05);
+      transition:0.3s ease;
+    }
+
+    .stat:hover{
+      transform:translateY(-5px);
+    }
+
+    .stat h3{
+      font-size:28px;
+      color:#304d30;
+      margin-bottom:6px;
+    }
+
+    .stat p{
+      color:#6a7468;
+      font-size:13px;
+    }
+
+    .inventory-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+      animation:fadeUp 1s ease;
+    }
+
+    .crop-card{
+      background:rgba(255,255,255,0.85);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(236,230,219,0.9);
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:0 14px 28px rgba(0,0,0,0.06);
+      transition:transform 0.35s ease, box-shadow 0.35s ease;
+      position:relative;
+    }
+
+    .crop-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg, rgba(85,107,47,0.05), rgba(184,116,50,0.04));
+      opacity:0;
+      transition:0.35s ease;
+      pointer-events:none;
+    }
+
+    .crop-card:hover{
+      transform:translateY(-10px);
+      box-shadow:0 22px 42px rgba(0,0,0,0.10);
+    }
+
+    .crop-card:hover::before{
+      opacity:1;
+    }
+
+    .crop-image{
+      width:100%;
+      height:190px;
+      object-fit:cover;
+      display:block;
+    }
+
+    .crop-body{
+      padding:22px 20px;
+      position:relative;
+      z-index:1;
+    }
+
+    .crop-name{
+      font-size:22px;
+      font-weight:700;
+      color:#304d30;
+      margin-bottom:12px;
+    }
+
+    .crop-info{
+      font-size:14px;
+      color:#687265;
+      line-height:1.8;
+      margin-bottom:8px;
+    }
+
+    .price{
+      color:#8c5d2d;
+      font-weight:700;
+    }
+
+    .empty-state{
+      grid-column:1/-1;
+      background:#fff;
+      border:1px solid #ece6db;
+      border-radius:22px;
+      padding:40px 20px;
+      text-align:center;
+      box-shadow:0 12px 24px rgba(0,0,0,0.05);
+      color:#6a7468;
+      font-size:15px;
+    }
+
+    footer{
+      text-align:center;
+      padding:30px 20px;
+      color:#6a7468;
+      font-size:14px;
+      margin-top:40px;
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(28px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @keyframes slideDown{
+      from{
+        opacity:0;
+        transform:translateY(-18px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @keyframes floatY{
+      0%,100%{transform:translateY(0);}
+      50%{transform:translateY(-6px);}
+    }
+
+    @media (max-width:960px){
+      .inventory-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .stats-row{
+        grid-template-columns:1fr 1fr 1fr;
+      }
+
+      .hero h1{
+        font-size:32px;
+      }
+    }
+
+    @media (max-width:620px){
+      header{
+        padding:16px 18px;
+        flex-direction:column;
+        gap:12px;
+      }
+
+      .inventory-grid{
+        grid-template-columns:1fr;
+      }
+
+      .stats-row{
+        grid-template-columns:1fr;
+      }
+
+      .hero{
+        padding:26px 20px;
+      }
+
+      .hero h1{
+        font-size:28px;
+      }
+
+      .header-right{
+        justify-content:center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">{{ t.logo }}</div>
+
+  <div class="header-right">
+    <div class="lang-switch">
+      <a href="/set_language/en">English</a>
+      <a href="/set_language/kn">ಕನ್ನಡ</a>
+    </div>
+    <a class="back-btn" href="/farmer_dashboard">← {{ t.back_to_dashboard }}</a>
+  </div>
+</header>
+
+<div class="container">
+
+  <section class="hero">
+    <div>
+      <h1>{{ t.community_inventory }}</h1>
+      <p>{{ t.community_inventory_desc_long }}</p>
+    </div>
+    <div class="hero-badge">📦 {{ t.shared_crop_inventory }}</div>
+  </section>
+
+  <div class="stats-row">
+    <div class="stat">
+      <h3>{{ inventory|length }}</h3>
+      <p>{{ t.available_crop_types }}</p>
+    </div>
+    <div class="stat">
+      <h3>Live</h3>
+      <p>{{ t.inventory_visibility }}</p>
+    </div>
+    <div class="stat">
+      <h3>Community</h3>
+      <p>{{ t.farmer_contribution }}</p>
+    </div>
+  </div>
+
+  <div class="inventory-grid" id="productsGrid">
+  {% for prod in inventory %}
+
+    {% set name = prod[0].lower().strip() %}
+    {% set img = 'https://images.pexels.com/photos/2252584/pexels-photo-2252584.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+    {% if 'carrot' in name or 'carrots' in name %}
+      {% set img = 'https://images.pexels.com/photos/143133/pexels-photo-143133.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'tomato' in name or 'tomatoes' in name %}
+      {% set img = 'https://images.pexels.com/photos/533280/pexels-photo-533280.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'potato' in name or 'potatoes' in name or 'aloo' in name %}
+      {% set img = 'https://images.pexels.com/photos/144248/potatoes-vegetables-food-agriculture-144248.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'onion' in name or 'onions' in name %}
+      {% set img = 'https://images.pexels.com/photos/4197445/pexels-photo-4197445.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'banana' in name or 'bananas' in name %}
+      {% set img = 'https://images.pexels.com/photos/2872755/pexels-photo-2872755.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'cabbage' in name %}
+      {% set img = 'https://images.pexels.com/photos/5945904/pexels-photo-5945904.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'brinjal' in name or 'eggplant' in name or 'baingan' in name %}
+      {% set img = 'https://images.pexels.com/photos/321551/pexels-photo-321551.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'chilli' in name or 'chili' in name or 'chilies' in name or 'green chilli' in name or 'mirchi' in name %}
+      {% set img = 'https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'corn' in name or 'maize' in name %}
+      {% set img = 'https://images.pexels.com/photos/547263/pexels-photo-547263.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'rice' in name %}
+      {% set img = 'https://images.pexels.com/photos/7421204/pexels-photo-7421204.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'wheat' in name %}
+      {% set img = 'https://images.pexels.com/photos/326082/pexels-photo-326082.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'apple' in name or 'apples' in name %}
+      {% set img = 'https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'mango' in name or 'mangoes' in name %}
+      {% set img = 'https://images.pexels.com/photos/918643/pexels-photo-918643.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'grape' in name or 'grapes' in name %}
+      {% set img = 'https://images.pexels.com/photos/708777/pexels-photo-708777.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'spinach' in name or 'palak' in name %}
+      {% set img = 'https://images.pexels.com/photos/2329440/pexels-photo-2329440.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'bean' in name or 'beans' in name %}
+      {% set img = 'https://images.pexels.com/photos/3004798/pexels-photo-3004798.jpeg' %}
+    {% elif 'cauliflower' in name %}
+      {% set img = 'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% elif 'okra' in name or 'lady finger' in name or 'bhindi' in name %}
+      {% set img = 'https://images.pexels.com/photos/5507737/pexels-photo-5507737.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+    {% endif %}
+
+    <div class="crop-card">
+      <img src="{{ img }}" alt="{{ prod[0] }}" class="crop-image">
+
+      <div class="crop-body">
+        <div class="crop-name">{{ prod[0] }}</div>
+        <div class="crop-info price">{{ t.average_price }}: ₹{{ "%.2f"|format(prod[1]) }} per kg</div>
+        <div class="crop-info">{{ t.available_quantity }}: {{ prod[2] }} kg</div>
+      </div>
+    </div>
+
+  {% else %}
+    <div class="empty-state">
+      {{ t.no_crops_available_desc }}
+    </div>
+  {% endfor %}
+</div>
+
+</div>
+
+<footer>
+  © 2026 {{ t.logo }} | Built with ❤️ by Latha
+</footer>
+
+</body>
+</html>

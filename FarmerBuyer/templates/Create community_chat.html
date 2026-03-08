@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ t.community_chat }} | Farm2Table</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#f7f4ee,#eef5ea);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.wrapper{
+  width:100%;
+  max-width:760px;
+  position:relative;
+}
+
+.lang-switch-top{
+  position:absolute;
+  top:-55px;
+  right:0;
+  display:flex;
+  gap:8px;
+}
+
+.lang-switch-top a{
+  text-decoration:none;
+  padding:8px 12px;
+  border-radius:10px;
+  background:#ecefe6;
+  color:#304d30;
+  font-size:13px;
+  font-weight:600;
+  border:1px solid #ddd;
+  transition:0.25s;
+}
+
+.lang-switch-top a:hover{
+  background:#dfe6d3;
+}
+
+.chat-container{
+  width:100%;
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(12px);
+  border-radius:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.08);
+  padding:30px;
+  animation:fadeUp 0.7s ease;
+}
+
+.chat-header{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.chat-header h2{
+  font-size:28px;
+  color:#2f4f2f;
+  margin-bottom:5px;
+}
+
+.chat-header p{
+  font-size:14px;
+  color:#6b7268;
+}
+
+.chat-box{
+  height:320px;
+  overflow-y:auto;
+  border-radius:12px;
+  background:#f5f7f2;
+  padding:15px;
+  margin-bottom:20px;
+  border:1px solid #e7e5dd;
+}
+
+.message{
+  background:white;
+  padding:10px 14px;
+  border-radius:10px;
+  margin-bottom:10px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.05);
+  font-size:14px;
+}
+
+.message strong{
+  color:#556b2f;
+}
+
+.empty-message{
+  text-align:center;
+  color:#7a7f75;
+  font-size:14px;
+  margin-top:120px;
+}
+
+.chat-form{
+  display:flex;
+  gap:10px;
+}
+
+.chat-form input{
+  flex:1;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-size:14px;
+  outline:none;
+  font-family:'Poppins',sans-serif;
+}
+
+.chat-form input:focus{
+  border-color:#8ca46b;
+}
+
+.chat-form button{
+  padding:12px 20px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(135deg,#556b2f,#7c9550);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.25s;
+}
+
+.chat-form button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(85,107,47,0.25);
+}
+
+.back{
+  display:block;
+  text-align:center;
+  margin-top:18px;
+  text-decoration:none;
+  color:#7a7f75;
+  font-size:14px;
+}
+
+.back:hover{
+  color:#556b2f;
+}
+
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(30px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@media (max-width:600px){
+  .lang-switch-top{
+    position:static;
+    justify-content:flex-end;
+    margin-bottom:12px;
+  }
+
+  .chat-container{
+    padding:20px;
+  }
+
+  .chat-form{
+    flex-direction:column;
+  }
+
+  .chat-form button{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <div class="lang-switch-top">
+    <a href="/set_language/en">English</a>
+    <a href="/set_language/kn">ಕನ್ನಡ</a>
+  </div>
+
+  <div class="chat-container">
+
+    <div class="chat-header">
+      <h2>{{ t.community_chat }} 💬</h2>
+      <p>{{ t.community_chat_desc_long }}</p>
+    </div>
+
+    <div class="chat-box">
+      {% if chats %}
+        {% for chat in chats %}
+          <div class="message">
+            <strong>{{ chat[0] }}:</strong> {{ chat[1] }}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty-message">
+          {{ t.no_messages_yet }}
+        </div>
+      {% endif %}
+    </div>
+
+    <form method="POST" class="chat-form">
+      <input type="text" name="message" placeholder="{{ t.type_message }}" required>
+      <button type="submit">{{ t.send }}</button>
+    </form>
+
+    <a href="/farmer_dashboard" class="back">
+      ← {{ t.back_to_dashboard }}
+    </a>
+
+  </div>
+
+</div>
+
+</body>
+</html>

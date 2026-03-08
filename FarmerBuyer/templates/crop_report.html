@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ t.farm_trust_report }} | Farm2Table</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#08bf51;
+      color:#1f2a1f;
+      min-height:100vh;
+      padding:30px 20px;
+    }
+
+    .page{
+      width:min(1000px,92%);
+      margin:auto;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .logo{
+      font-size:24px;
+      font-weight:800;
+      color:#304d30;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .lang-switch{
+      display:flex;
+      gap:8px;
+    }
+
+    .lang-switch a{
+      text-decoration:none;
+      padding:8px 12px;
+      border-radius:10px;
+      background:#ecefe6;
+      color:#304d30;
+      font-size:13px;
+      font-weight:600;
+      border:1px solid #ddd;
+    }
+
+    .back-btn{
+      text-decoration:none;
+      background:linear-gradient(135deg,#556b2f,#6f8741);
+      color:white;
+      padding:10px 16px;
+      border-radius:10px;
+      font-size:14px;
+      font-weight:600;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#908c89,#ead2bb);
+      color:white;
+      border-radius:28px;
+      padding:30px;
+      box-shadow:0 18px 40px rgba(184,116,50,0.18);
+      margin-bottom:25px;
+    }
+
+    .hero h1{
+      font-size:34px;
+      margin-bottom:8px;
+    }
+
+    .hero p{
+      font-size:15px;
+      line-height:1.8;
+      color:rgba(255,255,255,0.95);
+    }
+
+    .card{
+      background:rgba(255,255,255,0.9);
+      border:1px solid #ece6db;
+      border-radius:24px;
+      padding:26px;
+      box-shadow:0 14px 28px rgba(0,0,0,0.06);
+      margin-bottom:20px;
+    }
+
+    .card h2{
+      font-size:28px;
+      color:#304d30;
+      margin-bottom:14px;
+    }
+
+    .section-title{
+      font-size:18px;
+      color:#8c5d2d;
+      margin:18px 0 12px;
+      font-weight:700;
+    }
+
+    .info{
+      font-size:15px;
+      color:#5d675c;
+      line-height:1.9;
+      margin-bottom:6px;
+    }
+
+    .media-image{
+      width:100%;
+      border-radius:18px;
+      box-shadow:0 10px 20px rgba(0,0,0,0.10);
+      margin-top:12px;
+      display:block;
+    }
+
+    .media-video{
+      width:100%;
+      border-radius:18px;
+      margin-top:16px;
+      box-shadow:0 10px 20px rgba(0,0,0,0.10);
+      background:#000;
+    }
+
+    .empty-media{
+      margin-top:10px;
+      padding:14px;
+      border-radius:14px;
+      background:#f8f5ef;
+      border:1px solid #ece6db;
+      color:#6a7468;
+      font-size:14px;
+    }
+
+    .badge-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin:14px 0 10px;
+    }
+
+    .badge{
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      color:white;
+      background:linear-gradient(135deg,#556b2f,#6f8741);
+    }
+
+    .summary{
+      margin-top:14px;
+      padding:16px;
+      background:#f8f5ef;
+      border:1px solid #ece6db;
+      border-radius:16px;
+      color:#5d675c;
+      line-height:1.8;
+      font-size:14px;
+    }
+
+    @media (max-width:640px){
+      .hero h1{
+        font-size:28px;
+      }
+
+      .card{
+        padding:20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="topbar">
+    <div class="logo">{{ t.logo }}</div>
+
+    <div class="top-actions">
+      <div class="lang-switch">
+        <a href="/set_language/en">English</a>
+        <a href="/set_language/kn">ಕನ್ನಡ</a>
+      </div>
+      <a href="/buyer_dashboard" class="back-btn">← {{ t.back_to_dashboard }}</a>
+    </div>
+  </div>
+
+  <section class="hero">
+    <h1>🌱 {{ t.farm_trust_report }}</h1>
+    <p>{{ t.farm_trust_desc }}</p>
+  </section>
+
+  <div class="card">
+    <h2>{{ product['name'] }}</h2>
+
+    <div class="info"><strong>{{ t.farmer }}:</strong> {{ product['farmer_name'] }}</div>
+    <div class="info"><strong>{{ t.phone }}:</strong> {{ product['farmer_phone'] }}</div>
+    <div class="info"><strong>{{ t.community }}:</strong> {{ product['community_name'] or t.not_assigned }}</div>
+    <div class="info"><strong>{{ t.price }}:</strong> ₹{{ product['price'] }}/kg</div>
+    <div class="info"><strong>{{ t.available_quantity }}:</strong> {{ product['quantity'] }} kg</div>
+
+    <div class="section-title">📷 Crop Media</div>
+
+    {% if product['product_image'] %}
+      <img
+        src="{{ url_for('static', filename='uploads/' + product['product_image']) }}"
+        alt="{{ product['name'] }}"
+        class="media-image">
+    {% endif %}
+
+    {% if product['product_video'] %}
+      <video controls class="media-video">
+        <source src="{{ url_for('static', filename='uploads/' + product['product_video']) }}">
+        Your browser does not support the video tag.
+      </video>
+    {% endif %}
+
+    {% if not product['product_image'] and not product['product_video'] %}
+      <div class="empty-media">
+        No crop media uploaded by the farmer.
+      </div>
+    {% endif %}
+
+    <div class="section-title">🌾 {{ t.farming_details }}</div>
+    <div class="info"><strong>{{ t.farming_method }}:</strong> {{ product['farming_method'] or t.not_specified }}</div>
+    <div class="info"><strong>{{ t.pesticide_used }}:</strong> {{ product['pesticide_used'] or t.not_specified }}</div>
+    <div class="info"><strong>{{ t.fertilizer_used }}:</strong> {{ product['fertilizer_used'] or t.not_specified }}</div>
+    <div class="info"><strong>{{ t.harvest_date }}:</strong> {{ product['harvest_date'] or t.not_specified }}</div>
+    <div class="info"><strong>{{ t.storage_method }}:</strong> {{ product['storage_method'] or t.not_specified }}</div>
+
+    <div class="section-title">🤖 {{ t.ai_health_insight }}</div>
+
+    <div class="badge-row">
+      <div class="badge">{{ report['freshness'] }}</div>
+      <div class="badge">{{ report['safety'] }}</div>
+      <div class="badge">{{ report['badge'] }}</div>
+    </div>
+
+    <div class="summary">
+      {{ report['summary'] }}
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ t.site_title }}</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#08bf51;
+      color:#1f2a1f;
+      overflow-x:hidden;
+    }
+
+    .container{
+      width:min(1200px, 92%);
+      margin:auto;
+    }
+
+    .topbar{
+      padding:22px 0;
+    }
+
+    .nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:14px;
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:800;
+      color:#304d30;
+      letter-spacing:0.3px;
+    }
+
+    .nav-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .lang-switch{
+      display:flex;
+      gap:8px;
+      margin-right:4px;
+    }
+
+    .lang-switch a{
+      text-decoration:none;
+      padding:8px 14px;
+      border-radius:10px;
+      background:#ecefe6;
+      color:#304d30;
+      font-size:13px;
+      font-weight:600;
+      border:1px solid #ddd;
+      transition:0.25s;
+    }
+
+    .lang-switch a:hover{
+      background:#dfe6d3;
+    }
+
+    .btn{
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      font-size:14px;
+      font-weight:700;
+      transition:0.25s ease;
+      display:inline-block;
+    }
+
+    .btn-farmer{
+      background:#556b2f;
+      color:#fff;
+      box-shadow:0 10px 20px rgba(85,107,47,0.18);
+    }
+
+    .btn-farmer:hover{
+      background:#465824;
+      transform:translateY(-2px);
+    }
+
+    .btn-buyer{
+      background:#b87432;
+      color:#fff;
+      box-shadow:0 10px 20px rgba(184,116,50,0.18);
+    }
+
+    .btn-buyer:hover{
+      background:#9e6328;
+      transform:translateY(-2px);
+    }
+
+    .hero{
+      padding:30px 0 70px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.1fr 0.9fr;
+      gap:40px;
+      align-items:center;
+    }
+
+    .hero-text .tag{
+      display:inline-block;
+      background:#e6efe2;
+      color:#4d6547;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:18px;
+    }
+
+    .hero-text h1{
+      font-size:58px;
+      line-height:1.08;
+      font-weight:800;
+      color:#233423;
+      margin-bottom:18px;
+    }
+
+    .hero-text p{
+      font-size:17px;
+      line-height:1.9;
+      color:#5c675b;
+      max-width:620px;
+      margin-bottom:26px;
+    }
+
+    .hero-points{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .point{
+      background:#ffffff;
+      border:1px solid #ece6db;
+      border-radius:16px;
+      padding:16px;
+      box-shadow:0 10px 22px rgba(0,0,0,0.04);
+    }
+
+    .point h4{
+      font-size:15px;
+      color:#304d30;
+      margin-bottom:6px;
+    }
+
+    .point p{
+      font-size:13px;
+      line-height:1.6;
+      color:#6c746b;
+      margin:0;
+    }
+
+    .hero-card{
+      background:#fff;
+      border-radius:28px;
+      padding:18px;
+      box-shadow:0 20px 45px rgba(0,0,0,0.08);
+      border:1px solid #eee6d8;
+    }
+
+    .hero-card img{
+      width:100%;
+      height:420px;
+      object-fit:cover;
+      border-radius:20px;
+      display:block;
+    }
+
+    .hero-badge-row{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .badge-box{
+      background:#f8f5ef;
+      border-radius:16px;
+      padding:14px 10px;
+      text-align:center;
+      border:1px solid #efe7da;
+    }
+
+    .badge-box h3{
+      font-size:22px;
+      color:#304d30;
+      margin-bottom:4px;
+    }
+
+    .badge-box p{
+      font-size:12px;
+      color:#6c746b;
+      line-height:1.4;
+    }
+
+    .section{
+      padding:18px 0 70px;
+    }
+
+    .section-title{
+      text-align:center;
+      margin-bottom:36px;
+    }
+
+    .section-title h2{
+      font-size:38px;
+      color:#233423;
+      margin-bottom:10px;
+    }
+
+    .section-title p{
+      max-width:760px;
+      margin:auto;
+      color:#657063;
+      line-height:1.8;
+      font-size:16px;
+    }
+
+    .feature-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+    }
+
+    .feature-card{
+      background:#fff;
+      padding:22px;
+      border-radius:22px;
+      border:1px solid #eee6db;
+      box-shadow:0 14px 30px rgba(0,0,0,0.05);
+      transition:0.25s ease;
+      overflow:hidden;
+    }
+
+    .feature-card:hover{
+      transform:translateY(-6px);
+    }
+
+    .feature-img{
+      width:100%;
+      height:220px;
+      object-fit:cover;
+      border-radius:18px;
+      margin-bottom:16px;
+      display:block;
+    }
+
+    .icon{
+      width:54px;
+      height:54px;
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:24px;
+      margin-bottom:16px;
+      color:#fff;
+    }
+
+    .green{ background:#556b2f; }
+    .brown{ background:#b87432; }
+    .olive{ background:#7b8d5b; }
+
+    .feature-card h3{
+      font-size:21px;
+      color:#2b3b2b;
+      margin-bottom:10px;
+    }
+
+    .feature-card p{
+      font-size:14px;
+      line-height:1.8;
+      color:#677166;
+    }
+
+    .steps-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+    }
+
+    .step-card{
+      background:#fff;
+      border:1px solid #eee6db;
+      border-radius:22px;
+      padding:24px 22px;
+      box-shadow:0 14px 30px rgba(0,0,0,0.05);
+    }
+
+    .step-number{
+      width:44px;
+      height:44px;
+      border-radius:50%;
+      background:#304d30;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      margin-bottom:14px;
+    }
+
+    .step-card h3{
+      font-size:20px;
+      color:#2b3b2b;
+      margin-bottom:10px;
+    }
+
+    .step-card p{
+      font-size:14px;
+      color:#677166;
+      line-height:1.8;
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+    }
+
+    .stat-card{
+      background:#fff;
+      border:1px solid #eee6db;
+      border-radius:22px;
+      padding:24px 18px;
+      text-align:center;
+      box-shadow:0 14px 30px rgba(0,0,0,0.05);
+    }
+
+    .stat-card h3{
+      font-size:30px;
+      color:#304d30;
+      margin-bottom:6px;
+    }
+
+    .stat-card p{
+      font-size:13px;
+      color:#687265;
+    }
+
+    .showcase-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+      align-items:stretch;
+    }
+
+    .showcase-card{
+      background:#fff;
+      border:1px solid #eee6db;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:0 14px 30px rgba(0,0,0,0.05);
+    }
+
+    .showcase-card img{
+      width:100%;
+      height:280px;
+      object-fit:cover;
+      display:block;
+    }
+
+    .showcase-body{
+      padding:22px;
+    }
+
+    .showcase-body h3{
+      font-size:24px;
+      color:#2b3b2b;
+      margin-bottom:10px;
+    }
+
+    .showcase-body p{
+      font-size:14px;
+      line-height:1.8;
+      color:#677166;
+    }
+
+    .cta-band{
+      margin:10px 0 70px;
+      background:linear-gradient(135deg,#304d30,#6c7d50);
+      border-radius:30px;
+      padding:34px 28px;
+      color:#fff;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .cta-band h3{
+      font-size:30px;
+      margin-bottom:8px;
+    }
+
+    .cta-band p{
+      font-size:15px;
+      line-height:1.8;
+      color:rgba(255,255,255,0.9);
+      max-width:650px;
+    }
+
+    footer{
+      padding:28px 0 34px;
+      text-align:center;
+      color:#6a7468;
+      font-size:14px;
+    }
+
+    @media (max-width: 980px){
+      .hero-grid,
+      .feature-grid,
+      .steps-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .stats-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .showcase-grid{
+        grid-template-columns:1fr;
+      }
+
+      .hero-text h1{
+        font-size:44px;
+      }
+    }
+
+    @media (max-width: 640px){
+      .hero-grid,
+      .feature-grid,
+      .steps-grid,
+      .stats-grid,
+      .hero-points,
+      .hero-badge-row{
+        grid-template-columns:1fr;
+      }
+
+      .hero-text h1{
+        font-size:34px;
+      }
+
+      .nav{
+        flex-direction:column;
+        gap:14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="container nav">
+      <div class="logo">{{ t.logo }}</div>
+
+      <div class="nav-actions">
+        <div class="lang-switch">
+          <a href="/set_language/en">English</a>
+          <a href="/set_language/kn">ಕನ್ನಡ</a>
+        </div>
+        <a href="/farmer_login" class="btn btn-farmer">{{ t.farmer_login }}</a>
+        <a href="/buyer_login" class="btn btn-buyer">{{ t.buyer_login }}</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="container hero-grid">
+
+      <div class="hero-text">
+        <div class="tag">{{ t.hyperlocal_tag }}</div>
+        <h1>{{ t.welcome_title }}</h1>
+        <p>{{ t.welcome_subtitle }}</p>
+
+        <div class="hero-points">
+          <div class="point">
+            <h4>GPS-Based Discovery</h4>
+            <p>Buyers can quickly discover nearby farmer communities and locally available crops.</p>
+          </div>
+          <div class="point">
+            <h4>Direct Orders</h4>
+            <p>Fresh produce reaches buyers directly from farmers without middlemen.</p>
+          </div>
+          <div class="point">
+            <h4>Trust Reports</h4>
+            <p>Farming method, pesticide info, media uploads, and AI insights increase transparency.</p>
+          </div>
+          <div class="point">
+            <h4>Smart Farming Tools</h4>
+            <p>Farmers can manage inventory, communities, orders, and future profit tracking.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <img src="https://images.pexels.com/photos/2252584/pexels-photo-2252584.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Farmer with fresh produce">
+
+        <div class="hero-badge-row">
+          <div class="badge-box">
+            <h3>10KM</h3>
+            <p>Nearby crop discovery</p>
+          </div>
+          <div class="badge-box">
+            <h3>AI</h3>
+            <p>Trust report insights</p>
+          </div>
+          <div class="badge-box">
+            <h3>Direct</h3>
+            <p>Farmer to buyer flow</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+  <div class="container">
+
+    <div class="section-title">
+      <h2>{{ t.platform_features }}</h2>
+      <p>{{ t.platform_subtitle }}</p>
+    </div>
+
+    <div class="feature-grid">
+
+      <div class="feature-card">
+        <div class="icon green">🤖</div>
+        <h3>AI Farm Trust Report</h3>
+        <p>
+          Every crop listing includes an AI-generated trust summary based on
+          farming method, pesticide usage, harvest details, and storage information.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon brown">📷</div>
+        <h3>Crop Photos & Videos</h3>
+        <p>
+          Buyers can see how crops were grown through real images and videos
+          uploaded by farmers directly from the farm.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon olive">📍</div>
+        <h3>Nearby Farmer Communities</h3>
+        <p>
+          The platform automatically discovers farmer communities within a
+          10KM radius using GPS-based location matching.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon green">🌾</div>
+        <h3>Live Crop Inventory</h3>
+        <p>
+          Farmers can add fresh crops in real-time with price, quantity,
+          and farming details visible instantly to nearby buyers.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon brown">💬</div>
+        <h3>Farmer Communication</h3>
+        <p>
+          Farmers in the same community can communicate and share updates,
+          announcements, and farming discussions.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon olive">🛒</div>
+        <h3>Direct Farmer Orders</h3>
+        <p>
+          Buyers place orders directly with farmers, removing middlemen and
+          ensuring fresher produce at better prices.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>How It Works</h2>
+        <p>Farm2Table creates a simple, trusted, and local connection between farmers and buyers.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Farmers Join</h3>
+          <p>Farmers register, create or join communities, and add crops with price, quantity, and transparency details.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Buyers Discover</h3>
+          <p>Buyers find nearby communities through GPS-based matching and browse fresh local crop inventory.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Trust & Order</h3>
+          <p>Buyers view farm trust reports, photos, videos, and then place direct orders from local farmers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Trust & Transparency</h2>
+        <p>Professional farming visuals make your platform feel real, trusted, and strong during demos.</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <img class="feature-img" src="https://images.pexels.com/photos/2132250/pexels-photo-2132250.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Farmer checking crop quality">
+          <h3>Farm Trust Report</h3>
+          <p>Buyers can view crop growing details, pesticide usage, and AI-generated summaries before ordering.</p>
+        </div>
+
+        <div class="feature-card">
+          <img class="feature-img" src="https://images.pexels.com/photos/5528999/pexels-photo-5528999.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Farmers working together">
+          <h3>Community Farming</h3>
+          <p>Nearby farmers can collaborate through communities, coordinate stock, and serve buyers more effectively.</p>
+        </div>
+
+        <div class="feature-card">
+          <img class="feature-img" src="https://images.pexels.com/photos/1656663/pexels-photo-1656663.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Fresh vegetables basket">
+          <h3>Live Crop Inventory</h3>
+          <p>Fresh vegetables, fruits, and farm produce are listed directly by farmers for accurate local availability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Farmer to Buyer Experience</h2>
+        <p>Real visuals help explain your project better than empty space and make the platform look complete.</p>
+      </div>
+
+      <div class="showcase-grid">
+        <div class="showcase-card">
+          <img src="https://images.pexels.com/photos/95425/pexels-photo-95425.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Farmer selling directly to customer">
+          <div class="showcase-body">
+            <h3>Direct Local Selling</h3>
+            <p>Farm2Table reduces middlemen by connecting farmers directly with nearby buyers through a simple digital platform.</p>
+          </div>
+        </div>
+
+        <div class="showcase-card">
+          <img src="https://www.shutterstock.com/shutterstock/photos/2679551509/display_1500/stock-photo-soybean-plantation-in-brazil-rows-of-young-plants-show-agricultural-potential-with-fertile-soil-2679551509.jpg">
+          <div class="showcase-body">
+            <h3>Professional Crop Visibility</h3>
+            <p>Product images, crop videos, and farming details improve trust and help buyers make confident decisions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Platform Highlights</h2>
+        <p>Built for local agriculture, transparency, and direct farm commerce.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>10KM</h3>
+          <p>Nearby search radius</p>
+        </div>
+        <div class="stat-card">
+          <h3>AI</h3>
+          <p>Farm trust insights</p>
+        </div>
+        <div class="stat-card">
+          <h3>Media</h3>
+          <p>Crop photos and videos</p>
+        </div>
+        <div class="stat-card">
+          <h3>Direct</h3>
+          <p>Farmer to buyer orders</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="cta-band">
+      <div>
+        <h3>{{ t.cta_title }}</h3>
+        <p>{{ t.cta_desc }}</p>
+      </div>
+      <div>
+        <span style="font-size:15px;font-weight:700;">Fresh produce. Trusted farmers. Better local access.</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      © 2026 Farm2Table — {{ t.footer_text }}
+    </div>
+  </footer>
+
+</body>
+</html>

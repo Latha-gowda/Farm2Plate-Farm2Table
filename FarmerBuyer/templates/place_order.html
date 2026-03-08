@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Place Order</title>
+<style>
+body{font-family:Arial, sans-serif; background:#f0f8f5; padding:50px;}
+.container{max-width:500px; margin:auto; background:white; padding:30px; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.15);}
+h2{color:#43a047;}
+input, button{width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc;}
+button{background:#43a047; color:white; border:none; cursor:pointer;}
+button:hover{background:#388e3c;}
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Order: {{ product.name }}</h2>
+    <p>Price: ${{ product.price }}/kg</p>
+    <form method="POST">
+        Quantity (kg):
+        <input type="number" name="quantity" min="1" required>
+        <button type="submit">Place Order</button>
+    </form>
+</div>
+</body>
+</html>

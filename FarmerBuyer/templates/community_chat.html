@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Community Chat | Farm2Table 🌾</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- WhatsApp style mic icon -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:linear-gradient(135deg,#f7f4ee,#eef5ea);
+min-height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+header{
+background:#556b2f;
+color:white;
+padding:18px;
+text-align:center;
+font-size:24px;
+font-weight:600;
+}
+
+.container{
+flex:1;
+display:flex;
+flex-direction:column;
+width:95%;
+max-width:900px;
+margin:auto;
+}
+
+.chat-container{
+flex:1;
+padding:20px;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.message{
+background:white;
+padding:12px 16px;
+border-radius:12px;
+max-width:70%;
+box-shadow:0 5px 10px rgba(0,0,0,0.08);
+}
+
+.message.farmer{
+align-self:flex-start;
+border-left:4px solid #43a047;
+}
+
+.sender{
+font-weight:600;
+margin-bottom:4px;
+color:#2e7d32;
+}
+
+.text{
+font-size:14px;
+}
+
+.empty{
+text-align:center;
+color:#777;
+margin-top:50px;
+}
+
+.chat-form{
+display:flex;
+padding:15px;
+gap:10px;
+background:white;
+border-top:1px solid #ddd;
+}
+
+.chat-form input{
+flex:1;
+padding:12px;
+border-radius:25px;
+border:1px solid #ccc;
+outline:none;
+font-size:14px;
+}
+
+.send-btn{
+padding:10px 18px;
+border:none;
+background:#556b2f;
+color:white;
+border-radius:25px;
+cursor:pointer;
+font-weight:500;
+}
+
+.send-btn:hover{
+background:#3f4f20;
+}
+
+.mic-btn{
+width:45px;
+height:45px;
+border-radius:50%;
+border:none;
+background:#25D366;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
+transition:0.25s;
+}
+
+.mic-btn:hover{
+transform:scale(1.1);
+}
+
+.mic-btn .material-icons{
+font-size:26px;
+}
+
+.mic-btn.listening{
+background:#e53935;
+animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1)}
+50%{transform:scale(1.15)}
+100%{transform:scale(1)}
+}
+
+.voice-status{
+font-size:13px;
+padding:5px 15px;
+color:#666;
+}
+
+.back-link{
+padding:10px 15px;
+text-decoration:none;
+color:#1976d2;
+font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+🌾 Community Chat
+</header>
+
+<a class="back-link" href="/farmer_dashboard">← Back to Dashboard</a>
+
+<div class="container">
+
+<div class="chat-container" id="chatContainer">
+
+{% if chats %}
+{% for chat in chats %}
+
+<div class="message farmer">
+<div class="sender">{{ chat[0] }}</div>
+<div class="text">{{ chat[1] }}</div>
+</div>
+
+{% endfor %}
+{% else %}
+
+<div class="empty">
+No messages yet. Start the conversation!
+</div>
+
+{% endif %}
+
+</div>
+
+<form method="POST" class="chat-form">
+
+<input type="text" name="message" id="messageInput" placeholder="Type your message..." required>
+
+<button type="button" class="mic-btn" id="micBtn">
+<span class="material-icons">mic</span>
+</button>
+
+<button type="submit" class="send-btn">Send</button>
+
+</form>
+
+<div class="voice-status" id="voiceStatus"></div>
+
+</div>
+
+<script>
+
+const chatContainer = document.getElementById('chatContainer');
+chatContainer.scrollTop = chatContainer.scrollHeight;
+
+const micBtn = document.getElementById("micBtn");
+const messageInput = document.getElementById("messageInput");
+const voiceStatus = document.getElementById("voiceStatus");
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if(SpeechRecognition){
+
+const recognition = new SpeechRecognition();
+recognition.lang="en-IN";
+recognition.interimResults=false;
+recognition.continuous=false;
+
+micBtn.addEventListener("click",()=>{
+recognition.start();
+micBtn.classList.add("listening");
+voiceStatus.textContent="Listening... Speak now";
+});
+
+recognition.onresult=function(event){
+const transcript = event.results[0][0].transcript;
+messageInput.value = transcript;
+voiceStatus.textContent="Voice captured";
+};
+
+recognition.onerror=function(){
+voiceStatus.textContent="Voice error";
+micBtn.classList.remove("listening");
+};
+
+recognition.onend=function(){
+micBtn.classList.remove("listening");
+};
+
+}else{
+
+micBtn.disabled=true;
+voiceStatus.textContent="Voice input not supported in browser";
+
+}
+
+</script>
+
+</body>
+</html>

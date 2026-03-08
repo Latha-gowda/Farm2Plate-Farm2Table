@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ t.farmer_dashboard }} | Farm2Table</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#08bf51;
+      color:#1f2a1f;
+      min-height:100vh;
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    body::before,
+    body::after{
+      content:"";
+      position:fixed;
+      border-radius:50%;
+      filter:blur(60px);
+      z-index:0;
+      opacity:0.35;
+    }
+
+    body::before{
+      width:260px;
+      height:260px;
+      background:#b8d49b;
+      top:-60px;
+      left:-60px;
+    }
+
+    body::after{
+      width:320px;
+      height:320px;
+      background:#d8b48a;
+      bottom:-100px;
+      right:-80px;
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:rgba(255,255,255,0.78);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid #ece5d8;
+      padding:18px 40px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .logo{
+      font-size:24px;
+      font-weight:800;
+      color:#304d30;
+      letter-spacing:0.3px;
+    }
+
+    .header-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .lang-switch{
+      display:flex;
+      gap:8px;
+    }
+
+    .lang-switch a{
+      text-decoration:none;
+      padding:8px 12px;
+      border-radius:10px;
+      background:#ecefe6;
+      color:#304d30;
+      font-size:13px;
+      font-weight:600;
+      border:1px solid #ddd;
+      transition:0.25s;
+    }
+
+    .lang-switch a:hover{
+      background:#dfe6d3;
+    }
+
+    .home-btn{
+      text-decoration:none;
+      background:linear-gradient(135deg,#4f7c68,#77a089);
+      color:white;
+      padding:11px 18px;
+      border-radius:12px;
+      font-size:14px;
+      font-weight:700;
+      transition:0.25s ease;
+      box-shadow:0 8px 18px rgba(79,124,104,0.22);
+    }
+
+    .home-btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .logout{
+      text-decoration:none;
+      background:linear-gradient(135deg,#b87432,#d29054);
+      color:white;
+      padding:11px 18px;
+      border-radius:12px;
+      font-size:14px;
+      font-weight:600;
+      transition:0.3s ease;
+      box-shadow:0 8px 18px rgba(184,116,50,0.22);
+    }
+
+    .logout:hover{
+      transform:translateY(-2px) scale(1.03);
+      box-shadow:0 14px 24px rgba(184,116,50,0.30);
+    }
+
+    .container{
+      width:min(1240px,92%);
+      margin:auto;
+      padding:28px 0 52px;
+      position:relative;
+      z-index:1;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#304d30,#556b2f 58%,#738f43);
+      color:white;
+      border-radius:30px;
+      padding:26px 24px;
+      margin-bottom:16px;
+      box-shadow:0 18px 40px rgba(48,77,48,0.20);
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:18px;
+      flex-wrap:wrap;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      width:210px;
+      height:210px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.07);
+      right:-50px;
+      top:-50px;
+    }
+
+    .hero h1{
+      font-size:34px;
+      margin-bottom:8px;
+      font-weight:800;
+      position:relative;
+      z-index:1;
+    }
+
+    .hero p{
+      font-size:14px;
+      line-height:1.8;
+      max-width:720px;
+      color:rgba(255,255,255,0.93);
+      position:relative;
+      z-index:1;
+    }
+
+    .hero-badge{
+      position:relative;
+      z-index:1;
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.18);
+      padding:13px 17px;
+      border-radius:18px;
+      font-weight:700;
+      font-size:14px;
+      backdrop-filter:blur(8px);
+    }
+
+    .stats-row{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .stat{
+      background:#fff;
+      border:1px solid #ece6db;
+      border-radius:20px;
+      padding:16px 15px;
+      box-shadow:0 12px 24px rgba(0,0,0,0.05);
+    }
+
+    .stat h3{
+      font-size:24px;
+      color:#304d30;
+      margin-bottom:4px;
+      line-height:1.1;
+    }
+
+    .stat p{
+      color:#6a7468;
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .main-layout{
+      display:grid;
+      grid-template-columns:2fr 1fr;
+      gap:20px;
+      align-items:start;
+      margin-bottom:22px;
+    }
+
+    .dashboard{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    .card{
+      background:rgba(255,255,255,0.88);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(236,230,219,0.92);
+      border-radius:24px;
+      padding:22px 20px;
+      box-shadow:0 14px 28px rgba(0,0,0,0.06);
+      transition:transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+      overflow:hidden;
+    }
+
+    .card:hover{
+      transform:translateY(-6px);
+      box-shadow:0 22px 42px rgba(0,0,0,0.10);
+      border-color:#d9d0c3;
+    }
+
+    .icon-wrap{
+      width:56px;
+      height:56px;
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:27px;
+      margin-bottom:14px;
+      box-shadow:0 10px 24px rgba(0,0,0,0.08);
+    }
+
+    .green{ background:linear-gradient(135deg,#556b2f,#7d9950); }
+    .olive{ background:linear-gradient(135deg,#6f7f4f,#94aa70); }
+    .brown{ background:linear-gradient(135deg,#b87432,#d89a61); }
+    .gold{ background:linear-gradient(135deg,#b6923f,#d4b464); }
+    .teal{ background:linear-gradient(135deg,#4f7c68,#77a089); }
+    .purple{ background:linear-gradient(135deg,#5b4ea3,#8c7ae6); }
+
+    .card h2{
+      font-size:20px;
+      margin-bottom:8px;
+      color:#304d30;
+      line-height:1.3;
+    }
+
+    .card p{
+      font-size:14px;
+      color:#687265;
+      line-height:1.7;
+      margin-bottom:16px;
+    }
+
+    .card a{
+      display:inline-block;
+      text-decoration:none;
+      padding:10px 16px;
+      border-radius:12px;
+      font-size:14px;
+      font-weight:700;
+      color:white;
+      background:linear-gradient(135deg,#556b2f,#6f8741);
+      box-shadow:0 10px 20px rgba(85,107,47,0.18);
+      transition:0.3s ease;
+    }
+
+    .card a:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 24px rgba(85,107,47,0.26);
+    }
+
+    .ai-card{
+      border:2px solid rgba(92,78,163,0.16);
+      box-shadow:0 16px 32px rgba(91,78,163,0.10);
+    }
+
+    .side-panel{
+      display:grid;
+      gap:18px;
+    }
+
+    .panel-card{
+      background:rgba(255,255,255,0.9);
+      border:1px solid rgba(236,230,219,0.92);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:0 14px 28px rgba(0,0,0,0.06);
+    }
+
+    .panel-card h3{
+      font-size:19px;
+      color:#304d30;
+      margin-bottom:12px;
+    }
+
+    .summary-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .summary-item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:11px 12px;
+      border-radius:14px;
+      background:#f8f5ef;
+      border:1px solid #ece6db;
+      font-size:14px;
+      color:#5e675c;
+      line-height:1.5;
+    }
+
+    .summary-item strong{
+      color:#304d30;
+    }
+
+    .mini-tip{
+      background:#fff6ea;
+      border-left:4px solid #b87432;
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:14px;
+      line-height:1.7;
+      color:#5e675c;
+      margin-bottom:10px;
+    }
+
+    .mini-tip strong{
+      color:#304d30;
+    }
+
+    .gov-section{
+      background:rgba(255,255,255,0.9);
+      border:1px solid rgba(236,230,219,0.92);
+      border-radius:28px;
+      padding:22px;
+      box-shadow:0 14px 28px rgba(0,0,0,0.06);
+    }
+
+    .gov-head{
+      margin-bottom:16px;
+    }
+
+    .gov-head h2{
+      font-size:24px;
+      color:#304d30;
+      margin-bottom:6px;
+    }
+
+    .gov-head p{
+      font-size:14px;
+      color:#687265;
+      line-height:1.7;
+    }
+
+    .gov-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+    }
+
+    .gov-card{
+      background:#fff;
+      border:1px solid #ece6db;
+      border-radius:20px;
+      padding:18px 16px;
+      box-shadow:0 10px 22px rgba(0,0,0,0.05);
+      transition:0.3s ease;
+    }
+
+    .gov-card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 18px 30px rgba(0,0,0,0.08);
+    }
+
+    .gov-icon{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:24px;
+      color:#fff;
+      margin-bottom:12px;
+    }
+
+    .gov-green{ background:linear-gradient(135deg,#556b2f,#7d9950); }
+    .gov-brown{ background:linear-gradient(135deg,#b87432,#d89a61); }
+    .gov-teal{ background:linear-gradient(135deg,#4f7c68,#77a089); }
+    .gov-purple{ background:linear-gradient(135deg,#5b4ea3,#8c7ae6); }
+
+    .gov-card h3{
+      font-size:18px;
+      color:#304d30;
+      margin-bottom:8px;
+      line-height:1.4;
+    }
+
+    .gov-card p{
+      font-size:13px;
+      color:#687265;
+      line-height:1.7;
+      margin-bottom:14px;
+    }
+
+    .gov-card a{
+      display:inline-block;
+      text-decoration:none;
+      padding:10px 14px;
+      border-radius:12px;
+      font-size:13px;
+      font-weight:700;
+      color:white;
+      background:linear-gradient(135deg,#556b2f,#6f8741);
+      box-shadow:0 10px 20px rgba(85,107,47,0.18);
+    }
+
+    .gov-card a:hover{
+      transform:translateY(-2px);
+    }
+
+    .flash-wrapper{
+      position:fixed;
+      top:90px;
+      right:24px;
+      z-index:9999;
+    }
+
+    .flash-toast{
+      min-width:290px;
+      max-width:380px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-radius:16px;
+      color:#fff;
+      box-shadow:0 18px 35px rgba(0,0,0,0.18);
+      animation:slideInToast 0.45s ease, fadeOutToast 0.45s ease 3.6s forwards;
+      backdrop-filter:blur(10px);
+    }
+
+    .flash-success{
+      background:linear-gradient(135deg,#2e7d32,#4caf50);
+    }
+
+    .flash-error{
+      background:linear-gradient(135deg,#c62828,#ef5350);
+    }
+
+    .flash-icon{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      flex-shrink:0;
+    }
+
+    .flash-text{
+      font-size:14px;
+      font-weight:600;
+      line-height:1.5;
+      flex:1;
+    }
+
+    .flash-close{
+      border:none;
+      background:transparent;
+      color:#fff;
+      font-size:22px;
+      cursor:pointer;
+      line-height:1;
+      opacity:0.9;
+    }
+
+    .flash-close:hover{
+      opacity:1;
+    }
+
+    @keyframes slideInToast{
+      from{
+        opacity:0;
+        transform:translateX(30px) scale(0.95);
+      }
+      to{
+        opacity:1;
+        transform:translateX(0) scale(1);
+      }
+    }
+
+    @keyframes fadeOutToast{
+      to{
+        opacity:0;
+        transform:translateX(30px) scale(0.95);
+        pointer-events:none;
+      }
+    }
+
+    @media (max-width:1100px){
+      .main-layout{
+        grid-template-columns:1fr;
+      }
+
+      .gov-grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media (max-width:960px){
+      .dashboard{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .stats-row{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .hero h1{
+        font-size:30px;
+      }
+    }
+
+    @media (max-width:620px){
+      header{
+        padding:16px 18px;
+        flex-direction:column;
+        gap:12px;
+      }
+
+      .dashboard,
+      .stats-row,
+      .gov-grid{
+        grid-template-columns:1fr;
+      }
+
+      .hero{
+        padding:22px 18px;
+      }
+
+      .hero h1{
+        font-size:27px;
+      }
+
+      .header-right{
+        justify-content:center;
+      }
+
+      .gov-section{
+        padding:18px;
+      }
+
+      .flash-wrapper{
+        left:16px;
+        right:16px;
+        top:84px;
+      }
+
+      .flash-toast{
+        min-width:auto;
+        width:100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">{{ t.logo }}</div>
+
+  <div class="header-right">
+    <div class="lang-switch">
+      <a href="/set_language/en">English</a>
+      <a href="/set_language/kn">ಕನ್ನಡ</a>
+    </div>
+    <a class="home-btn" href="/">🏠 Home</a>
+    <a class="logout" href="/farmer_login">{{ t.logout }}</a>
+  </div>
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-wrapper">
+      {% for category, message in messages %}
+        <div class="flash-toast flash-{{ category }}" id="flashToast">
+          <div class="flash-icon">
+            {% if category == 'success' %}✅{% else %}⚠️{% endif %}
+          </div>
+          <div class="flash-text">{{ message }}</div>
+          <button class="flash-close" onclick="closeFlash()">×</button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="container">
+
+  <section class="hero">
+    <div>
+      <h1>{{ t.farmer_dashboard }}</h1>
+      <p>{{ t.farmer_dashboard_desc_long }}</p>
+    </div>
+    <div class="hero-badge">🌱 {{ t.smart_farming_panel }}</div>
+  </section>
+
+  <div class="stats-row">
+    <div class="stat">
+      <h3>{{ total_products or 0 }}</h3>
+      <p>Products Listed</p>
+    </div>
+    <div class="stat">
+      <h3>{{ total_orders or 0 }}</h3>
+      <p>Orders Received</p>
+    </div>
+    <div class="stat">
+      <h3>{{ low_stock_count or 0 }}</h3>
+      <p>Low Stock Items</p>
+    </div>
+    <div class="stat">
+      <h3>{{ trust_score or 0 }}%</h3>
+      <p>Profile Quality</p>
+    </div>
+  </div>
+
+  <div class="main-layout">
+
+    <div class="dashboard">
+
+      <div class="card">
+        <div class="icon-wrap green">🌱</div>
+        <h2>{{ t.join_or_create_community }}</h2>
+        <p>{{ t.join_or_create_desc }}</p>
+        <a href="/select_community">{{ t.open }}</a>
+      </div>
+
+      <div class="card">
+        <div class="icon-wrap brown">🌾</div>
+        <h2>{{ t.add_crop }}</h2>
+        <p>{{ t.add_new_farm_products }}</p>
+        <a href="/add_crop">{{ t.open }}</a>
+      </div>
+
+      <div class="card">
+        <div class="icon-wrap olive">📦</div>
+        <h2>{{ t.community_inventory }}</h2>
+        <p>{{ t.view_all_available_products }}</p>
+        <a href="/community_inventory">{{ t.open }}</a>
+      </div>
+
+      <div class="card">
+        <div class="icon-wrap teal">💬</div>
+        <h2>{{ t.community_chat }}</h2>
+        <p>{{ t.communicate_fellow_farmers }}</p>
+        <a href="/community_chat">{{ t.open }}</a>
+      </div>
+
+      <div class="card">
+        <div class="icon-wrap gold">🛒</div>
+        <h2>{{ t.buyer_orders }}</h2>
+        <p>{{ t.track_orders_manage }}</p>
+        <a href="/farmer_orders">{{ t.open }}</a>
+      </div>
+
+      <div class="card ai-card">
+        <div class="icon-wrap purple">🤖</div>
+        <h2>AI Farm Insights</h2>
+        <p>See demand, sales, stock alerts, buyer trust score, and smart farming suggestions.</p>
+        <a href="/farmer_ai_insights">Open</a>
+      </div>
+
+    </div>
+
+    <div class="side-panel">
+
+      <div class="panel-card">
+        <h3>Live Farm Summary</h3>
+        <div class="summary-list">
+          <div class="summary-item">
+            <span>Community</span>
+            <strong>{{ community_name or 'Not joined' }}</strong>
+          </div>
+          <div class="summary-item">
+            <span>Best Crop</span>
+            <strong>{{ top_crop or 'No sales yet' }}</strong>
+          </div>
+          <div class="summary-item">
+            <span>Low Stock</span>
+            <strong>{{ low_stock_count or 0 }}</strong>
+          </div>
+          <div class="summary-item">
+            <span>Trust Score</span>
+            <strong>{{ trust_score or 0 }}%</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <h3>AI Quick Notes</h3>
+        <div class="mini-tip">
+          <strong>Demand:</strong> {{ ai_demand_tip or 'No sales data yet.' }}
+        </div>
+        <div class="mini-tip">
+          <strong>Stock:</strong> {{ ai_stock_tip or 'Your stock is stable.' }}
+        </div>
+        <div class="mini-tip">
+          <strong>Activity:</strong> {{ ai_activity_tip or 'Buyer activity insights will appear here.' }}
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <h3>Next Best Action</h3>
+        <div class="mini-tip">
+          <strong>Suggestion:</strong>
+          {% if total_products == 0 %}
+            Add your first crop to start getting buyer attention.
+          {% elif community_name == 'Not joined' %}
+            Join a nearby community to improve visibility.
+          {% elif low_stock_count > 0 %}
+            Refill low stock crops to avoid missing orders.
+          {% elif total_orders == 0 %}
+            Improve crop details and photos to attract buyers.
+          {% else %}
+            Keep your top selling crop updated and maintain stock regularly.
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="gov-section">
+    <div class="gov-head">
+      <h2>Government Support for Farmers</h2>
+      <p>Open official central and Karnataka farmer scheme websites directly.</p>
+    </div>
+
+    <div class="gov-grid">
+
+      <div class="gov-card">
+        <div class="gov-icon gov-green">₹</div>
+        <h3>PM-KISAN</h3>
+        <p>Income support scheme for eligible farmer families.</p>
+        <a href="https://pmkisan.gov.in/" target="_blank" rel="noopener">Open Official Site</a>
+      </div>
+
+      <div class="gov-card">
+        <div class="gov-icon gov-brown">🛡️</div>
+        <h3>PMFBY Crop Insurance</h3>
+        <p>Official crop insurance portal for farmer protection.</p>
+        <a href="https://pmfby.gov.in/" target="_blank" rel="noopener">Open Official Site</a>
+      </div>
+
+      <div class="gov-card">
+        <div class="gov-icon gov-teal">🌾</div>
+        <h3>e-NAM Market</h3>
+        <p>National agriculture market for digital trading and mandi access.</p>
+        <a href="https://enam.gov.in/" target="_blank" rel="noopener">Open Official Site</a>
+      </div>
+
+      <div class="gov-card">
+        <div class="gov-icon gov-purple">🏛️</div>
+        <h3>Karnataka Raita Mitra</h3>
+        <p>Official Karnataka agriculture services and farmer schemes.</p>
+        <a href="https://raitamitra.karnataka.gov.in/en" target="_blank" rel="noopener">Open Official Site</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function closeFlash() {
+    const toast = document.getElementById("flashToast");
+    if (toast) {
+      toast.style.display = "none";
+    }
+  }
+
+  setTimeout(() => {
+    const toast = document.getElementById("flashToast");
+    if (toast) {
+      toast.style.display = "none";
+    }
+  }, 4000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buyer Cart | Farm2Table</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#08bf51;
+      color:#1f2a1f;
+      min-height:100vh;
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    body::before,
+    body::after{
+      content:"";
+      position:fixed;
+      border-radius:50%;
+      filter:blur(60px);
+      z-index:0;
+      opacity:0.35;
+    }
+
+    body::before{
+      width:260px;
+      height:260px;
+      background:#d8b48a;
+      top:-60px;
+      left:-60px;
+    }
+
+    body::after{
+      width:320px;
+      height:320px;
+      background:#b8d49b;
+      bottom:-100px;
+      right:-80px;
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background:rgba(255,255,255,0.78);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid #ece5d8;
+      padding:18px 40px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .logo{
+      font-size:24px;
+      font-weight:800;
+      color:#304d30;
+      letter-spacing:0.3px;
+    }
+
+    .header-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .lang-switch{
+      display:flex;
+      gap:8px;
+    }
+
+    .lang-switch a{
+      text-decoration:none;
+      padding:8px 12px;
+      border-radius:10px;
+      background:#ecefe6;
+      color:#304d30;
+      font-size:13px;
+      font-weight:600;
+      border:1px solid #ddd;
+      transition:0.25s;
+    }
+
+    .lang-switch a:hover{
+      background:#dfe6d3;
+    }
+
+    .back-btn,
+    .logout{
+      text-decoration:none;
+      color:white;
+      padding:10px 16px;
+      border-radius:12px;
+      font-size:14px;
+      font-weight:700;
+      transition:0.3s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .back-btn{
+      background:linear-gradient(135deg,#556b2f,#6f8741);
+      box-shadow:0 8px 18px rgba(85,107,47,0.20);
+    }
+
+    .back-btn:hover{
+      transform:translateY(-2px) scale(1.03);
+    }
+
+    .logout{
+      background:linear-gradient(135deg,#b87432,#d29054);
+      box-shadow:0 8px 18px rgba(184,116,50,0.22);
+    }
+
+    .logout:hover{
+      transform:translateY(-2px) scale(1.03);
+    }
+
+    .container{
+      width:min(1200px,92%);
+      margin:auto;
+      padding:42px 0 60px;
+      position:relative;
+      z-index:1;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#908c89,#ead2bb);
+      color:white;
+      border-radius:28px;
+      padding:34px 30px;
+      margin-bottom:28px;
+      box-shadow:0 18px 40px rgba(184,116,50,0.18);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+      overflow:hidden;
+      position:relative;
+      animation:fadeUp 0.8s ease;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.08);
+      right:-40px;
+      top:-40px;
+    }
+
+    .hero h1{
+      font-size:36px;
+      margin-bottom:8px;
+      font-weight:800;
+    }
+
+    .hero p{
+      font-size:15px;
+      line-height:1.8;
+      max-width:650px;
+      color:rgba(255,255,255,0.92);
+    }
+
+    .hero-badge{
+      background:rgba(255,255,255,0.16);
+      border:1px solid rgba(255,255,255,0.18);
+      padding:14px 20px;
+      border-radius:18px;
+      font-weight:700;
+      font-size:14px;
+      backdrop-filter:blur(8px);
+    }
+
+    .stats-row{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin:0 0 28px;
+      animation:fadeUp 0.9s ease;
+    }
+
+    .stat{
+      background:#fff;
+      border:1px solid #ece6db;
+      border-radius:20px;
+      text-align:center;
+      padding:22px 16px;
+      box-shadow:0 12px 24px rgba(0,0,0,0.05);
+    }
+
+    .stat h3{
+      font-size:28px;
+      color:#304d30;
+      margin-bottom:6px;
+    }
+
+    .stat p{
+      color:#6a7468;
+      font-size:13px;
+    }
+
+    .cart-layout{
+      display:grid;
+      grid-template-columns:1.7fr 0.9fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .cart-list,
+    .summary-card{
+      background:rgba(255,255,255,0.86);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(236,230,219,0.9);
+      border-radius:24px;
+      box-shadow:0 14px 28px rgba(0,0,0,0.06);
+      animation:fadeUp 1s ease;
+    }
+
+    .cart-list{
+      padding:22px;
+    }
+
+    .summary-card{
+      padding:22px;
+      position:sticky;
+      top:100px;
+    }
+
+    .section-title{
+      font-size:24px;
+      font-weight:800;
+      color:#233423;
+      margin-bottom:18px;
+    }
+
+    .cart-item{
+      display:grid;
+      grid-template-columns:110px 1fr auto;
+      gap:18px;
+      padding:18px 0;
+      border-bottom:1px solid #ece6db;
+      align-items:center;
+    }
+
+    .cart-item:last-child{
+      border-bottom:none;
+    }
+
+    .cart-item img{
+      width:110px;
+      height:90px;
+      object-fit:cover;
+      border-radius:16px;
+      display:block;
+    }
+
+    .item-info h3{
+      font-size:20px;
+      color:#304d30;
+      margin-bottom:6px;
+    }
+
+    .item-info p{
+      font-size:14px;
+      color:#687265;
+      line-height:1.8;
+      margin-bottom:2px;
+    }
+
+    .item-info p strong{
+      color:#304d30;
+    }
+
+    .item-actions{
+      min-width:160px;
+      text-align:right;
+    }
+
+    .price{
+      font-size:18px;
+      font-weight:800;
+      color:#8c5d2d;
+      margin-bottom:12px;
+    }
+
+    .remove-btn{
+      text-decoration:none;
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:12px;
+      font-size:13px;
+      font-weight:700;
+      color:white;
+      background:linear-gradient(135deg,#c62828,#ef5350);
+      box-shadow:0 10px 20px rgba(198,40,40,0.18);
+      transition:0.25s ease;
+    }
+
+    .remove-btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .summary-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:12px 0;
+      border-bottom:1px solid #ece6db;
+      font-size:14px;
+      color:#687265;
+    }
+
+    .summary-row:last-of-type{
+      border-bottom:none;
+    }
+
+    .summary-row strong{
+      color:#304d30;
+    }
+
+    .grand-total{
+      margin-top:14px;
+      padding-top:14px;
+      border-top:2px solid #ece6db;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:18px;
+      font-weight:800;
+      color:#304d30;
+    }
+
+    .checkout-btn{
+      width:100%;
+      margin-top:18px;
+      border:none;
+      text-decoration:none;
+      display:inline-block;
+      text-align:center;
+      padding:14px 18px;
+      border-radius:14px;
+      font-size:15px;
+      font-weight:700;
+      color:white;
+      background:linear-gradient(135deg,#556b2f,#6f8741);
+      box-shadow:0 10px 20px rgba(85,107,47,0.18);
+      cursor:pointer;
+      transition:0.25s ease;
+    }
+
+    .checkout-btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .checkout-note{
+      margin-top:10px;
+      font-size:13px;
+      color:#6a7468;
+      line-height:1.7;
+      text-align:center;
+    }
+
+    .empty-cart{
+      background:#fff;
+      border:1px solid #ece6db;
+      border-radius:24px;
+      padding:40px 24px;
+      text-align:center;
+      box-shadow:0 12px 24px rgba(0,0,0,0.05);
+      animation:fadeUp 0.9s ease;
+    }
+
+    .empty-cart h2{
+      font-size:28px;
+      color:#304d30;
+      margin-bottom:10px;
+    }
+
+    .empty-cart p{
+      color:#687265;
+      font-size:15px;
+      line-height:1.8;
+      margin-bottom:20px;
+    }
+
+    .shop-btn{
+      text-decoration:none;
+      display:inline-block;
+      padding:12px 18px;
+      border-radius:14px;
+      font-size:14px;
+      font-weight:700;
+      color:white;
+      background:linear-gradient(135deg,#556b2f,#6f8741);
+      box-shadow:0 10px 20px rgba(85,107,47,0.18);
+    }
+
+    .flash-wrapper{
+      position:fixed;
+      top:90px;
+      right:24px;
+      z-index:9999;
+    }
+
+    .flash-toast{
+      min-width:290px;
+      max-width:380px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-radius:16px;
+      color:#fff;
+      box-shadow:0 18px 35px rgba(0,0,0,0.18);
+      animation:slideInToast 0.45s ease, fadeOutToast 0.45s ease 3.6s forwards;
+      backdrop-filter:blur(10px);
+    }
+
+    .flash-success{
+      background:linear-gradient(135deg,#2e7d32,#4caf50);
+    }
+
+    .flash-error{
+      background:linear-gradient(135deg,#c62828,#ef5350);
+    }
+
+    .flash-icon{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      flex-shrink:0;
+    }
+
+    .flash-text{
+      font-size:14px;
+      font-weight:600;
+      line-height:1.5;
+      flex:1;
+    }
+
+    .flash-close{
+      border:none;
+      background:transparent;
+      color:#fff;
+      font-size:22px;
+      cursor:pointer;
+      line-height:1;
+      opacity:0.9;
+    }
+
+    .flash-close:hover{
+      opacity:1;
+    }
+
+    footer{
+      text-align:center;
+      padding:30px 20px;
+      color:#6a7468;
+      font-size:14px;
+      margin-top:40px;
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(24px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @keyframes slideInToast{
+      from{
+        opacity:0;
+        transform:translateX(30px) scale(0.95);
+      }
+      to{
+        opacity:1;
+        transform:translateX(0) scale(1);
+      }
+    }
+
+    @keyframes fadeOutToast{
+      to{
+        opacity:0;
+        transform:translateX(30px) scale(0.95);
+        pointer-events:none;
+      }
+    }
+
+    @media (max-width:980px){
+      .cart-layout{
+        grid-template-columns:1fr;
+      }
+
+      .summary-card{
+        position:static;
+      }
+
+      .stats-row{
+        grid-template-columns:1fr 1fr 1fr;
+      }
+    }
+
+    @media (max-width:720px){
+      header{
+        padding:16px 18px;
+        flex-direction:column;
+      }
+
+      .stats-row{
+        grid-template-columns:1fr;
+      }
+
+      .cart-item{
+        grid-template-columns:1fr;
+      }
+
+      .cart-item img{
+        width:100%;
+        height:180px;
+      }
+
+      .item-actions{
+        text-align:left;
+        min-width:auto;
+      }
+
+      .flash-wrapper{
+        left:16px;
+        right:16px;
+        top:84px;
+      }
+
+      .flash-toast{
+        min-width:auto;
+        width:100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">{{ t.logo }}</div>
+
+  <div class="header-right">
+    <div class="lang-switch">
+      <a href="/set_language/en">English</a>
+      <a href="/set_language/kn">ಕನ್ನಡ</a>
+    </div>
+    <a class="back-btn" href="/buyer_dashboard">← Back to Dashboard</a>
+    <a class="logout" href="/buyer_login">{{ t.logout }}</a>
+  </div>
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-wrapper">
+      {% for category, message in messages %}
+        <div class="flash-toast flash-{{ category }}" id="flashToast">
+          <div class="flash-icon">
+            {% if category == 'success' %}✅{% else %}⚠️{% endif %}
+          </div>
+          <div class="flash-text">{{ message }}</div>
+          <button class="flash-close" onclick="closeFlash()">×</button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="container">
+
+  <section class="hero">
+    <div>
+      <h1>Buyer Cart</h1>
+      <p>
+        Review the products you added, check farmer details, verify totals, and place your order in one step.
+      </p>
+    </div>
+    <div class="hero-badge">🛒 Cart Summary</div>
+  </section>
+
+  {% if cart_items %}
+    <div class="stats-row">
+      <div class="stat">
+        <h3>{{ cart_items|length }}</h3>
+        <p>Unique Products</p>
+      </div>
+      <div class="stat">
+        <h3>{{ total_items if total_items is defined else cart_items|sum(attribute='cart_quantity') }}</h3>
+        <p>Total Cart Items</p>
+      </div>
+      <div class="stat">
+        <h3>₹{{ "%.2f"|format(grand_total) }}</h3>
+        <p>Grand Total</p>
+      </div>
+    </div>
+
+    <div class="cart-layout">
+      <div class="cart-list">
+        <h2 class="section-title">Cart Items</h2>
+
+        {% for item in cart_items %}
+          {% set img = 'https://images.pexels.com/photos/209339/pexels-photo-209339.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+
+          {% if 'carrot' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/143133/pexels-photo-143133.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'tomato' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/533280/pexels-photo-533280.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'potato' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/144248/potatoes-vegetables-food-agriculture-144248.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'onion' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/4197445/pexels-photo-4197445.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'banana' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/2872755/pexels-photo-2872755.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'cabbage' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/5945904/pexels-photo-5945904.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'brinjal' in item.name.lower() or 'eggplant' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/321551/pexels-photo-321551.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'chilli' in item.name.lower() or 'chili' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'corn' in item.name.lower() or 'maize' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/547263/pexels-photo-547263.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'rice' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/7421204/pexels-photo-7421204.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'wheat' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/326082/pexels-photo-326082.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'apple' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'mango' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/918643/pexels-photo-918643.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% elif 'grapes' in item.name.lower() %}
+            {% set img = 'https://images.pexels.com/photos/708777/pexels-photo-708777.jpeg?auto=compress&cs=tinysrgb&w=800' %}
+          {% endif %}
+
+          <div class="cart-item">
+            {% if item.product_image %}
+              <img src="{{ url_for('static', filename='uploads/' + item.product_image) }}" alt="{{ item.name }}">
+            {% else %}
+              <img src="{{ img }}" alt="{{ item.name }}">
+            {% endif %}
+
+            <div class="item-info">
+              <h3>{{ item.name }}</h3>
+              <p><strong>Farmer:</strong> {{ item.farmer_name }}</p>
+              <p><strong>Price:</strong> ₹{{ item.price }}/kg</p>
+              <p><strong>Selected Quantity:</strong> {{ item.cart_quantity }}</p>
+              <p><strong>Available Quantity:</strong> {{ item.available_quantity }} kg</p>
+            </div>
+
+            <div class="item-actions">
+              <div class="price">₹{{ "%.2f"|format(item.subtotal) }}</div>
+              <a href="/remove_from_cart/{{ item.id }}" class="remove-btn">Remove</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="summary-card">
+        <h2 class="section-title">Order Summary</h2>
+
+        <div class="summary-row">
+          <span>Total Products</span>
+          <strong>{{ cart_items|length }}</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Total Quantity</span>
+          <strong>{{ total_items if total_items is defined else cart_items|sum(attribute='cart_quantity') }}</strong>
+        </div>
+
+        <div class="grand-total">
+          <span>Grand Total</span>
+          <span>₹{{ "%.2f"|format(grand_total) }}</span>
+        </div>
+
+        <form method="POST" action="/place_cart_order">
+          <button type="submit" class="checkout-btn">Place All Orders</button>
+        </form>
+
+        <div class="checkout-note">
+          Review your cart carefully before placing the final order.
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+    <div class="empty-cart">
+      <h2>Your cart is empty</h2>
+      <p>
+        You have not added any products yet. Explore nearby farmer products and add them to your cart.
+      </p>
+      <a href="/buyer_dashboard" class="shop-btn">Browse Products</a>
+    </div>
+  {% endif %}
+
+</div>
+
+<footer>
+  © 2026 {{ t.logo }} | Built with ❤️ by Latha
+</footer>
+
+<script>
+  function closeFlash() {
+    const toast = document.getElementById("flashToast");
+    if (toast) {
+      toast.style.display = "none";
+    }
+  }
+
+  setTimeout(() => {
+    const toast = document.getElementById("flashToast");
+    if (toast) {
+      toast.style.display = "none";
+    }
+  }, 4000);
+</script>
+
+</body>
+</html>
