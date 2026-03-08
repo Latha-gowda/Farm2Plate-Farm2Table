@@ -17,7 +17,7 @@ This system improves *farmer income, transparency, and accessibility* in local a
 The home page allows users to choose whether they want to log in as a *Farmer* or a *Buyer*.  
 It serves as the entry point of the platform.
 
-![Home Page]"[screenshots\Screenshot 2026-03-08 215334.png](https://github.com/Latha-gowda/Farm2Plate-Farm2Table/blob/main/screenshots/Screenshot%202026-03-08%20215334.png?raw=true)"
+![Home Page](screenshots/Screenshot-2026-03-08-215334.png)
 
 ---
 
