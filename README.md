@@ -1,10 +1,5 @@
-# 🌾 Farm2Table
-### AI-Powered Farmer to Buyer Direct Marketplace
-
 Farm2Table is a web application that connects *farmers directly with nearby buyers without middlemen*.  
-The platform allows farmers to list crops, manage inventory, and sell products to buyers within a *10KM radius*.
-
-This system improves *farmer income, transparency, and accessibility* in local agricultural markets.
+The platform allows farmers to list crops, manage inventory, and sell products within a *10KM radius*.
 
 ---
 
@@ -17,107 +12,120 @@ This system improves *farmer income, transparency, and accessibility* in local a
 The home page allows users to choose whether they want to log in as a *Farmer* or a *Buyer*.  
 It serves as the entry point of the platform.
 
-![Home Page](Screenshots/home_page.png)
+<p align="center">
+  <img src="FarmerBuyer/screenshots/home_page.png" width="900">
+</p>
 
 ---
 
 ## 👨‍🌾 Farmer Dashboard
 
-The farmer dashboard provides farmers with tools to manage their farming activities.  
-Farmers can add crops, view community inventory, manage orders, and access AI insights.
+The farmer dashboard allows farmers to manage their farming activities such as adding crops, managing orders, viewing community inventory, and accessing AI insights.
 
-![Farmer Dashboard](screenshots/farmer_dashboard.png)
+<p align="center">
+  <img src="screenshots/farmer_dashboard.png" width="900">
+</p>
 
 ---
 
 ## 🌾 Add Crop
 
-Farmers can upload crops with details such as:
+Farmers can upload crops with details including:
 
 - Crop name  
-- Price per kg  
-- Quantity available  
+- Price per kilogram  
+- Available quantity  
 - Crop image  
 
-This allows buyers to view available farm products.
+This helps buyers view and purchase available farm products.
 
-![Add Crop](screenshots/add_crop.png)
+<p align="center">
+  <img src="screenshots/add_crop.png" width="900">
+</p>
 
 ---
 
 ## 📦 Community Inventory
 
-Farmers within the same community can view all crops available in their area.  
-This helps farmers coordinate selling and avoid oversupply.
+The community inventory shows all crops uploaded by farmers within the same community.  
+This allows farmers and buyers to view available products and quantities.
 
-![Community Inventory](screenshots/inventory.png)
+<p align="center">
+  <img src="screenshots/community_inventory.png" width="900">
+</p>
 
 ---
 
 ## 💬 Farmer Community Chat
 
-Farmers in the same community can communicate with each other to discuss:
+Farmers within the same community can communicate with each other to share farming knowledge, discuss crop demand, and coordinate selling strategies.
 
-- farming techniques  
-- crop demand  
-- market trends
-
-![Community Chat](screenshots/chat.png)
+<p align="center">
+  <img src="screenshots/community_chat.png" width="900">
+</p>
 
 ---
 
 ## 🛒 Buyer Dashboard
 
-Buyers can explore farm products available within a *10KM radius*, view product details, and place orders directly with farmers.
+Buyers can explore crops available within a *10KM radius*, view product details, and place orders directly with farmers.
 
-![Buyer Dashboard](screenshots/buyer_dashboard.png)
+<p align="center">
+  <img src="screenshots/buyer_dashboard.png" width="900">
+</p>
 
 ---
 
 ## 🤖 AI Farming Insights
 
-The AI dashboard provides visual insights for farmers such as:
+The AI Insights dashboard provides farmers with useful analytics such as:
 
-- crop demand trends  
-- price trends  
-- community activity  
-- profit summary
+- Crop demand trends  
+- Price trends  
+- Community activity  
+- Profit summaries  
 
-These insights help farmers make better selling decisions.
+These insights help farmers make better decisions.
 
-![AI Insights](screenshots/ai_insights.png)
+<p align="center">
+  <img src="screenshots/ai_insights.png" width="900">
+</p>
 
 ---
 
 # 🌐 Multilingual Support
 
-The system supports multiple languages:
+The platform supports multiple languages to make it accessible to local farmers.
 
-- English
+Supported languages:
+
+- English  
 - Kannada
 
-This makes the platform accessible to local farmers.
+<p align="center">
+  <img src="screenshots/language_support.png" width="900">
+</p>
 
 ---
 
 # 🛠 Technology Stack
 
-### Backend
+*Backend*
 - Python
 - Flask
 
-### Frontend
+*Frontend*
 - HTML
 - CSS
 - JavaScript
 
-### Database
+*Database*
 - SQLite
 
-### Visualization
+*Visualization*
 - Chart.js
 
-### Version Control
+*Version Control*
 - Git
 - GitHub
 
