@@ -70,7 +70,7 @@ Farmers within the same community can communicate with each other to share farmi
 Buyers can explore crops available within a *10KM radius*, view product details, and place orders directly with farmers.
 
 <p align="center">
-  <img src="FarmerBuyer/screenshots/buyer_dashboard.png" width="900">
+  <img src="FarmerBuyer/screenshots/buyers_dashboard.png" width="900">
 </p>
 
 ---
