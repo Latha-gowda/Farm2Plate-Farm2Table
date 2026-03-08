@@ -14,6 +14,8 @@ It serves as the entry point of the platform.
 
 <p align="center">
   <img src="FarmerBuyer/screenshots/home_page.png" width="900">
+  <img src="FarmerBuyer/screenshots/home_page_2.png" width="900">
+
 </p>
 
 ---
@@ -23,7 +25,7 @@ It serves as the entry point of the platform.
 The farmer dashboard allows farmers to manage their farming activities such as adding crops, managing orders, viewing community inventory, and accessing AI insights.
 
 <p align="center">
-  <img src="screenshots/farmer_dashboard.png" width="900">
+  <img src="FarmerBuyer/screenshots/farmer_dashboard.png" width="900">
 </p>
 
 ---
@@ -40,7 +42,7 @@ Farmers can upload crops with details including:
 This helps buyers view and purchase available farm products.
 
 <p align="center">
-  <img src="screenshots/add_crop.png" width="900">
+  <img src="FarmerBuyer/screenshots/add_crop.png" width="900">
 </p>
 
 ---
@@ -51,7 +53,7 @@ The community inventory shows all crops uploaded by farmers within the same comm
 This allows farmers and buyers to view available products and quantities.
 
 <p align="center">
-  <img src="screenshots/community_inventory.png" width="900">
+  <img src="FarmerBuyer/screenshots/community_inventory.png" width="900">
 </p>
 
 ---
@@ -60,9 +62,6 @@ This allows farmers and buyers to view available products and quantities.
 
 Farmers within the same community can communicate with each other to share farming knowledge, discuss crop demand, and coordinate selling strategies.
 
-<p align="center">
-  <img src="screenshots/community_chat.png" width="900">
-</p>
 
 ---
 
@@ -71,7 +70,7 @@ Farmers within the same community can communicate with each other to share farmi
 Buyers can explore crops available within a *10KM radius*, view product details, and place orders directly with farmers.
 
 <p align="center">
-  <img src="screenshots/buyer_dashboard.png" width="900">
+  <img src="FarmerBuyer/screenshots/buyer_dashboard.png" width="900">
 </p>
 
 ---
@@ -88,7 +87,7 @@ The AI Insights dashboard provides farmers with useful analytics such as:
 These insights help farmers make better decisions.
 
 <p align="center">
-  <img src="screenshots/ai_insights.png" width="900">
+  <img src="FarmerBuyer/screenshots/farmer_AI_inventory.png" width="900">
 </p>
 
 ---
@@ -103,7 +102,7 @@ Supported languages:
 - Kannada
 
 <p align="center">
-  <img src="screenshots/language_support.png" width="900">
+  <img src="FarmerBuyer/screenshots/farmer_login.png" width="900">
 </p>
 
 ---
